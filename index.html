@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>NF3. Spare Part Stock</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+  body{font-family:'Sarabun',sans-serif}
+  .mono{font-family:'JetBrains Mono',monospace}
+  .screen{display:none}
+  .screen.active{display:flex}
+  /* Animated gradient bg */
+  .grad-bg{background:linear-gradient(135deg,#0a1628 0%,#0F4C81 50%,#1a3a6b 100%)}
+  /* Glow effect */
+  .glow{box-shadow:0 0 30px rgba(59,130,246,.4)}
+  .glow-green{box-shadow:0 0 20px rgba(34,197,94,.3)}
+  .glow-red{box-shadow:0 0 20px rgba(239,68,68,.3)}
+  /* Category buttons */
+  .cat-btn{transition:all .2s ease;transform:translateY(0)}
+  .cat-btn:hover{transform:translateY(-4px)}
+  .cat-btn:active{transform:translateY(0) scale(.97)}
+  /* Stock badge */
+  .badge-ok{background:#166534;color:#bbf7d0}
+  .badge-yellow{background:#854d0e;color:#fef08a}
+  .badge-red{background:#7f1d1d;color:#fecaca;animation:pulse-red 1.5s infinite}
+  @keyframes pulse-red{0%,100%{opacity:1}50%{opacity:.7}}
+  /* Table */
+  .tbl-row:hover td{background:rgba(59,130,246,.08)}
+  /* Input */
+  .qty-inp{width:72px;text-align:center}
+  .qty-inp::-webkit-inner-spin-button{opacity:1}
+  /* PIN */
+  .pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid #4b5563;background:transparent;transition:.2s}
+  .pin-dot.filled{background:#3b82f6;border-color:#3b82f6;box-shadow:0 0 8px rgba(59,130,246,.6)}
+  .pin-key{transition:.1s;user-select:none}
+  .pin-key:active{transform:scale(.93);background:#1d4ed8}
+  /* Slide animations */
+  @keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+  .slide-up{animation:slideUp .4s ease forwards}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .fade-in{animation:fadeIn .3s ease forwards}
+  /* Scrollbar */
+  ::-webkit-scrollbar{width:4px;height:4px}
+  ::-webkit-scrollbar-track{background:#1e293b}
+  ::-webkit-scrollbar-thumb{background:#475569;border-radius:2px}
+  /* Toast */
+  #toast{transition:all .3s ease;pointer-events:none}
+  /* Sidebar active */
+  .sb-active{background:rgba(59,130,246,.2);border-left:3px solid #3b82f6;color:#93c5fd}
+</style>
+</head>
+<body class="bg-gray-950 text-white min-h-screen">
+
+<!-- ─── SCREEN 1: Welcome ──────────────────────────────────── -->
+<div id="scr-welcome" class="screen active grad-bg flex-col items-center justify-center min-h-screen relative overflow-hidden">
+  <!-- Decorative circles -->
+  <div class="absolute w-96 h-96 rounded-full bg-blue-600 opacity-10 -top-20 -left-20 blur-3xl"></div>
+  <div class="absolute w-80 h-80 rounded-full bg-blue-400 opacity-10 -bottom-20 -right-20 blur-3xl"></div>
+
+  <div class="relative z-10 text-center px-8 slide-up">
+    <!-- Logo / Icon -->
+    <div class="w-24 h-24 rounded-3xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center mx-auto mb-8 glow">
+      <span class="text-4xl">🔧</span>
+    </div>
+    <h1 class="text-6xl font-black tracking-tight mb-2 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent" id="app-name">NF3.</h1>
+    <p class="text-xl text-blue-200 font-light mb-2">Spare Part Stock Management</p>
+    <p class="text-base text-blue-300 mb-12" id="welcome-msg">กำลังโหลด...</p>
+    <button onclick="goToSelect()" class="px-12 py-4 bg-blue-600 hover:bg-blue-500 rounded-2xl text-xl font-bold tracking-wide transition-all glow hover:scale-105 active:scale-95">
+      Start →
+    </button>
+  </div>
+
+  <!-- Clock -->
+  <div class="absolute bottom-8 text-blue-400 text-sm mono" id="welcome-clock"></div>
+  <!-- Supervisor btn -->
+  <button onclick="openPIN('config')" class="absolute top-6 right-6 text-blue-400 hover:text-white text-xs px-3 py-1 border border-blue-800 rounded-full hover:border-blue-500 transition">⚙ Supervisor</button>
+</div>
+
+<!-- ─── SCREEN 2: Category Select ─────────────────────────── -->
+<div id="scr-select" class="screen grad-bg flex-col items-center justify-start min-h-screen pt-16 pb-8 px-6">
+  <button onclick="goTo('welcome')" class="self-start text-blue-400 hover:text-white mb-6 text-sm flex items-center gap-2">← กลับ</button>
+  <div class="w-full max-w-3xl slide-up">
+    <h2 class="text-5xl font-black mb-2 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">Spare part.</h2>
+    <p class="text-blue-300 mb-10">เลือกประเภทอะไหล่ที่ต้องการจัดการ</p>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <button onclick="goToStock('Sachet')"     class="cat-btn flex flex-col items-center justify-center gap-3 p-6 rounded-2xl bg-gradient-to-br from-blue-900 to-blue-800 border border-blue-700 hover:border-blue-400 glow">
+        <span class="text-4xl">🔩</span><span class="text-lg font-bold">Sachet</span>
+        <span class="text-xs text-blue-300 text-center">SM9-12</span>
+      </button>
+      <button onclick="goToStock('Lina M')"    class="cat-btn flex flex-col items-center justify-center gap-3 p-6 rounded-2xl bg-gradient-to-br from-purple-900 to-purple-800 border border-purple-700 hover:border-purple-400" style="box-shadow:0 0 20px rgba(168,85,247,.2)">
+        <span class="text-4xl">⚙️</span><span class="text-lg font-bold">Lina M</span>
+        <span class="text-xs text-purple-300 text-center">Medium Line</span>
+      </button>
+      <button onclick="goToStock('Lina L')"    class="cat-btn flex flex-col items-center justify-center gap-3 p-6 rounded-2xl bg-gradient-to-br from-emerald-900 to-emerald-800 border border-emerald-700 hover:border-emerald-400" style="box-shadow:0 0 20px rgba(52,211,153,.2)">
+        <span class="text-4xl">🔧</span><span class="text-lg font-bold">Lina L</span>
+        <span class="text-xs text-emerald-300 text-center">Large Line</span>
+      </button>
+      <button onclick="goToStock('Mespack 570')" class="cat-btn flex flex-col items-center justify-center gap-3 p-6 rounded-2xl bg-gradient-to-br from-orange-900 to-orange-800 border border-orange-700 hover:border-orange-400" style="box-shadow:0 0 20px rgba(251,146,60,.2)">
+        <span class="text-4xl">🏭</span><span class="text-lg font-bold">Mespack 570</span>
+        <span class="text-xs text-orange-300 text-center">Mespack</span>
+      </button>
+    </div>
+    <!-- Summary badges -->
+    <div class="mt-10 grid grid-cols-3 gap-4 text-center" id="summary-badges">
+      <div class="bg-gray-900 border border-gray-700 rounded-xl p-4">
+        <div class="text-2xl font-black text-white" id="sum-total">—</div>
+        <div class="text-xs text-gray-400 mt-1">รายการทั้งหมด</div>
+      </div>
+      <div class="bg-yellow-900/30 border border-yellow-700/50 rounded-xl p-4">
+        <div class="text-2xl font-black text-yellow-400" id="sum-low">—</div>
+        <div class="text-xs text-yellow-500 mt-1">ใกล้หมด ⚠️</div>
+      </div>
+      <div class="bg-red-900/30 border border-red-700/50 rounded-xl p-4">
+        <div class="text-2xl font-black text-red-400" id="sum-crit">—</div>
+        <div class="text-xs text-red-500 mt-1">วิกฤต 🚨</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SCREEN 3: Stock Table ──────────────────────────────── -->
+<div id="scr-stock" class="screen flex-col min-h-screen bg-gray-950">
+  <!-- Top bar -->
+  <div class="bg-gray-900 border-b border-gray-800 px-4 py-3 flex items-center justify-between sticky top-0 z-30">
+    <div class="flex items-center gap-3">
+      <button onclick="goTo('select')" class="text-gray-400 hover:text-white p-1">←</button>
+      <h2 class="text-lg font-bold" id="stock-title">Sachet</h2>
+      <span id="stock-cat-badge" class="text-xs px-2 py-0.5 rounded-full bg-blue-900 text-blue-200"></span>
+    </div>
+    <div class="flex items-center gap-2">
+      <span id="last-update" class="text-xs text-gray-500 hidden md:block"></span>
+      <button onclick="loadStock(currentCat,true)" class="text-gray-400 hover:text-white text-sm p-1">🔄</button>
+      <button onclick="openPIN('supervisor')" class="text-xs px-3 py-1.5 border border-gray-700 hover:border-blue-500 text-gray-300 hover:text-white rounded-lg transition">⚙ จัดการ</button>
+    </div>
+  </div>
+
+  <div class="flex flex-1 overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="hidden md:flex flex-col w-48 bg-gray-900 border-r border-gray-800 py-4 gap-1 flex-shrink-0">
+      <button onclick="goTo('welcome')" class="text-left px-4 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg mx-2 transition">🏠 หน้าแรก</button>
+      <div class="h-px bg-gray-800 mx-4 my-1"></div>
+      <p class="text-xs text-gray-600 px-4 mb-1 uppercase tracking-wider">ประเภท</p>
+      <button id="sb-Sachet"      onclick="loadStock('Sachet')"      class="text-left px-4 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg mx-2 transition border-l-2 border-transparent">🔩 Sachet</button>
+      <button id="sb-Lina M"      onclick="loadStock('Lina M')"      class="text-left px-4 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg mx-2 transition border-l-2 border-transparent">⚙️ Lina M</button>
+      <button id="sb-Lina L"      onclick="loadStock('Lina L')"      class="text-left px-4 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg mx-2 transition border-l-2 border-transparent">🔧 Lina L</button>
+      <button id="sb-Mespack 570" onclick="loadStock('Mespack 570')" class="text-left px-4 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg mx-2 transition border-l-2 border-transparent">🏭 Mespack</button>
+    </aside>
+
+    <!-- Main content -->
+    <div class="flex-1 overflow-auto p-4">
+      <!-- Loading -->
+      <div id="tbl-loading" class="flex flex-col items-center justify-center py-20 gap-4">
+        <div class="w-10 h-10 border-4 border-blue-800 border-t-blue-400 rounded-full animate-spin"></div>
+        <p class="text-gray-500">กำลังโหลดข้อมูล...</p>
+      </div>
+      <!-- Error -->
+      <div id="tbl-error" class="hidden text-center py-16">
+        <p class="text-4xl mb-3">⚠️</p>
+        <p class="text-red-400 mb-1">เชื่อมต่อไม่ได้</p>
+        <p class="text-gray-500 text-sm mb-4">ตรวจสอบ GAS_URL ในไฟล์</p>
+        <button onclick="loadStock(currentCat,true)" class="px-4 py-2 bg-blue-700 hover:bg-blue-600 rounded-lg text-sm">ลองอีกครั้ง</button>
+      </div>
+      <!-- Table wrapper -->
+      <div id="tbl-wrap" class="hidden">
+        <!-- Mobile: card view | Desktop: table -->
+        <div class="overflow-x-auto rounded-xl border border-gray-800">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-gray-900 text-gray-400 text-xs uppercase tracking-wider">
+                <th class="px-3 py-3 text-center w-10">#</th>
+                <th class="px-3 py-3 text-left">รายการ</th>
+                <th class="px-3 py-3 text-center">คงเหลือ</th>
+                <th class="px-3 py-3 text-center w-16">หน่วย</th>
+                <th class="px-3 py-3 text-center w-20">จำนวนที่ใช้</th>
+                <th class="px-3 py-3 text-left min-w-32">สาเหตุ</th>
+                <th class="px-3 py-3 text-center w-20">เลือก</th>
+              </tr>
+            </thead>
+            <tbody id="stock-tbody" class="divide-y divide-gray-800/50"></tbody>
+          </table>
+        </div>
+
+        <!-- Action bar -->
+        <div class="mt-4 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between bg-gray-900 rounded-xl p-4 border border-gray-800">
+          <div class="flex items-center gap-3 text-sm text-gray-400">
+            <span id="selected-count" class="text-white font-semibold">0</span> รายการที่เลือก
+            <button onclick="clearAll()" class="text-xs text-gray-500 hover:text-red-400 transition">ล้างทั้งหมด</button>
+          </div>
+          <div class="flex gap-3">
+            <button onclick="selectAll()" class="px-4 py-2 border border-gray-700 hover:border-gray-500 rounded-lg text-sm transition">เลือกทั้งหมด</button>
+            <button onclick="submitCuts()" class="px-6 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-sm font-bold transition flex items-center gap-2 disabled:opacity-50" id="btn-submit">
+              ✂️ ตัดสต็อก
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── PIN Modal ───────────────────────────────────────────── -->
+<div id="pin-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+  <div class="bg-gray-900 border border-gray-700 rounded-3xl p-8 w-full max-w-sm slide-up">
+    <div class="text-center mb-6">
+      <div class="text-4xl mb-3">🔐</div>
+      <h3 class="text-xl font-bold" id="pin-title">Supervisor Login</h3>
+      <p class="text-gray-400 text-sm mt-1">กรอก PIN 4 หลัก</p>
+    </div>
+    <div class="flex justify-center gap-4 mb-2">
+      <div class="pin-dot" id="pd0"></div>
+      <div class="pin-dot" id="pd1"></div>
+      <div class="pin-dot" id="pd2"></div>
+      <div class="pin-dot" id="pd3"></div>
+    </div>
+    <p class="text-center text-red-400 text-sm h-5 mb-3" id="pin-err"></p>
+    <div class="grid grid-cols-3 gap-3">
+      <button class="pin-key py-4 text-xl font-bold rounded-xl bg-gray-800 hover:bg-blue-700 transition" onclick="pinKey('1')">1</button>
+      <button class="pin-key py-4 text-xl font-bold rounded-xl bg-gray-800 hover:bg-blue-700 transition" onclick="pinKey('2')">2</button>
+      <button class="pin-key py-4 text-xl font-bold rounded-xl bg-gray-800 hover:bg-blue-700 transition" onclick="pinKey('3')">3</button>
+      <button class="pin-key py-4 text-xl font-bold rounded-xl bg-gray-800 hover:bg-blue-700 transition" onclick="pinKey('4')">4</button>
+      <button class="pin-key py-4 text-xl font-bold rounded-xl bg-gray-800 hover:bg-blue-700 transition" onclick="pinKey('5')">5</button>
+      <button class="pin-key py-4 text-xl font-bold rounded-xl bg-gray-800 hover:bg-blue-700 transition" onclick="pinKey('6')">6</button>
+      <button class="pin-key py-4 text-xl font-bold rounded-xl bg-gray-800 hover:bg-blue-700 transition" onclick="pinKey('7')">7</button>
+      <button class="pin-key py-4 text-xl font-bold rounded-xl bg-gray-800 hover:bg-blue-700 transition" onclick="pinKey('8')">8</button>
+      <button class="pin-key py-4 text-xl font-bold rounded-xl bg-gray-800 hover:bg-blue-700 transition" onclick="pinKey('9')">9</button>
+      <button class="pin-key py-4 text-xl font-bold rounded-xl bg-red-900/50 hover:bg-red-800 transition text-red-400" onclick="pinClose()">✕</button>
+      <button class="pin-key py-4 text-xl font-bold rounded-xl bg-gray-800 hover:bg-blue-700 transition" onclick="pinKey('0')">0</button>
+      <button class="pin-key py-4 text-xl font-bold rounded-xl bg-gray-800 hover:bg-gray-700 transition text-gray-300" onclick="pinDel()">⌫</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Supervisor Panel ────────────────────────────────────── -->
+<div id="sv-panel" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+  <div class="bg-gray-900 border border-gray-700 rounded-3xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto slide-up">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-xl font-bold">⚙️ จัดการสต็อก (Supervisor)</h3>
+      <button onclick="closeSvPanel()" class="text-gray-400 hover:text-white text-xl">✕</button>
+    </div>
+    <!-- Add new item -->
+    <div class="bg-gray-800 rounded-2xl p-4 mb-4">
+      <h4 class="font-semibold mb-3 text-blue-300">+ เพิ่มรายการใหม่</h4>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+        <div class="col-span-2 md:col-span-3">
+          <label class="text-xs text-gray-400 mb-1 block">ชื่อรายการ</label>
+          <input id="sv-new-name" type="text" placeholder="เช่น ใบมีดตัด รุ่น XYZ" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"/>
+        </div>
+        <div>
+          <label class="text-xs text-gray-400 mb-1 block">ประเภท</label>
+          <select id="sv-new-cat" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none">
+            <option>Sachet</option><option>Lina M</option><option>Lina L</option><option>Mespack 570</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-xs text-gray-400 mb-1 block">จำนวนเริ่มต้น</label>
+          <input id="sv-new-stock" type="number" placeholder="0" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none mono"/>
+        </div>
+        <div>
+          <label class="text-xs text-gray-400 mb-1 block">หน่วย</label>
+          <input id="sv-new-unit" type="text" placeholder="ชิ้น" value="ชิ้น" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"/>
+        </div>
+        <div>
+          <label class="text-xs text-gray-400 mb-1 block">เกณฑ์เหลือน้อย 🟡</label>
+          <input id="sv-new-yellow" type="number" placeholder="5" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none mono"/>
+        </div>
+        <div>
+          <label class="text-xs text-gray-400 mb-1 block">เกณฑ์วิกฤต 🔴</label>
+          <input id="sv-new-red" type="number" placeholder="2" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none mono"/>
+        </div>
+      </div>
+      <button onclick="svAddItem()" class="mt-3 px-5 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-sm font-semibold transition">+ เพิ่มรายการ</button>
+    </div>
+
+    <!-- Edit existing items -->
+    <div class="bg-gray-800 rounded-2xl p-4 mb-4">
+      <h4 class="font-semibold mb-3 text-green-300">✏️ แก้ไขสต็อกปัจจุบัน (<span id="sv-cat-label"></span>)</h4>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead><tr class="text-gray-400 text-xs">
+            <th class="text-left pb-2">รายการ</th>
+            <th class="text-center pb-2 w-20">สต็อก</th>
+            <th class="text-center pb-2 w-16">🟡</th>
+            <th class="text-center pb-2 w-16">🔴</th>
+            <th class="text-center pb-2 w-16">บันทึก</th>
+            <th class="text-center pb-2 w-10">ลบ</th>
+          </tr></thead>
+          <tbody id="sv-tbody" class="divide-y divide-gray-700/50"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Welcome message config -->
+    <div class="bg-gray-800 rounded-2xl p-4">
+      <h4 class="font-semibold mb-3 text-yellow-300">💬 แก้ไขข้อความหน้าแรก</h4>
+      <input id="sv-welcome-msg" type="text" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none mb-2"/>
+      <button onclick="svSaveMsg()" class="px-4 py-2 bg-yellow-600 hover:bg-yellow-500 rounded-lg text-sm font-semibold transition">บันทึกข้อความ</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Toast ────────────────────────────────────────────────── -->
+<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 px-6 py-3 rounded-2xl font-semibold text-sm z-[100] opacity-0 translate-y-4 text-white shadow-2xl"></div>
+
+<!-- ─── Confirm Modal ────────────────────────────────────────── -->
+<div id="confirm-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+  <div class="bg-gray-900 border border-gray-700 rounded-3xl p-6 w-full max-w-sm slide-up text-center">
+    <div class="text-5xl mb-4">✂️</div>
+    <h3 class="text-xl font-bold mb-2">ยืนยันการตัดสต็อก</h3>
+    <p class="text-gray-400 text-sm mb-4">รายการที่เลือกจะถูกหักออกจากสต็อกทันที</p>
+    <div id="confirm-list" class="bg-gray-800 rounded-xl p-3 text-sm text-left mb-5 max-h-48 overflow-y-auto"></div>
+    <div class="flex gap-3">
+      <button onclick="closeConfirm()" class="flex-1 py-3 border border-gray-700 hover:border-gray-500 rounded-xl transition">ยกเลิก</button>
+      <button onclick="confirmCut()" class="flex-1 py-3 bg-blue-600 hover:bg-blue-500 rounded-xl font-bold transition">✅ ยืนยัน</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ──────────────────────────────────────────────────────────────
+const GAS_URL = "https://script.google.com/macros/s/AKfycbyZZCpV0sSoc3muY8a3irrbH7XaC9vdMb-PbDv7sXR-eNAQVIR-XCnu4iDilDXhw6re/exec"; // ← ใส่ URL Apps Script
+// ──────────────────────────────────────────────────────────────
+
+let currentCat   = "Sachet";
+let stockData    = [];
+let isSupervisor = false;
+let svPIN        = "";
+let pinMode      = "supervisor";
+let pendingCuts  = [];
+
+// ── API ───────────────────────────────────────────────────────
+async function api(action, data={}){
+  try{
+    const r = await fetch(GAS_URL,{method:"POST",body:JSON.stringify({action,...data})});
+    return await r.json();
+  }catch(e){return{error:e.message};}
+}
+async function apiGet(params){
+  try{
+    const qs = new URLSearchParams(params).toString();
+    const r  = await fetch(GAS_URL+"?"+qs);
+    return await r.json();
+  }catch(e){return{error:e.message};}
+}
+
+// ── Navigation ────────────────────────────────────────────────
+function goTo(name){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById("scr-"+name)?.classList.add("active");
+}
+function goToSelect(){
+  goTo("select");
+  loadAllSummary();
+}
+function goToStock(cat){
+  currentCat=cat;
+  goTo("stock");
+  loadStock(cat);
+}
+
+// ── Load Config ───────────────────────────────────────────────
+async function loadConfig(){
+  const r = await apiGet({action:"getConfig"});
+  if(r.ok&&r.config){
+    document.getElementById("welcome-msg").textContent = r.config.WelcomeMsg||"วันนี้คุณมีวันที่ดีแล้วหรือยัง?";
+    document.getElementById("app-name").textContent    = r.config.AppName||"NF3.";
+  } else {
+    document.getElementById("welcome-msg").textContent = "วันนี้คุณมีวันที่ดีแล้วหรือยัง?";
+  }
+}
+
+// ── Load All Summary ──────────────────────────────────────────
+async function loadAllSummary(){
+  const r = await apiGet({action:"getStock",category:""});
+  if(!r.ok) return;
+  const items = r.items||[];
+  let low=0,crit=0;
+  items.forEach(i=>{
+    if(i.stock<=i.minRed) crit++;
+    else if(i.stock<=i.minYellow) low++;
+  });
+  document.getElementById("sum-total").textContent = items.length;
+  document.getElementById("sum-low").textContent   = low;
+  document.getElementById("sum-crit").textContent  = crit;
+}
+
+// ── Load Stock ────────────────────────────────────────────────
+async function loadStock(cat, force=false){
+  currentCat = cat;
+  document.getElementById("stock-title").textContent    = cat;
+  document.getElementById("stock-cat-badge").textContent= cat;
+  // Sidebar active state
+  document.querySelectorAll("[id^='sb-']").forEach(b=>{
+    b.classList.remove("sb-active","font-semibold","text-blue-300");
+    b.classList.add("text-gray-400");
+  });
+  const sbBtn = document.getElementById("sb-"+cat);
+  if(sbBtn){sbBtn.classList.add("sb-active","font-semibold","text-blue-300");sbBtn.classList.remove("text-gray-400");}
+
+  document.getElementById("tbl-loading").classList.remove("hidden");
+  document.getElementById("tbl-error").classList.add("hidden");
+  document.getElementById("tbl-wrap").classList.add("hidden");
+
+  const r = await apiGet({action:"getStock",category:cat});
+  document.getElementById("tbl-loading").classList.add("hidden");
+  document.getElementById("last-update").textContent = "อัปเดต: "+new Date().toLocaleTimeString("th-TH");
+  document.getElementById("last-update").classList.remove("hidden");
+
+  if(!r.ok||r.error){
+    document.getElementById("tbl-error").classList.remove("hidden");
+    return;
+  }
+  stockData = r.items||[];
+  renderTable();
+  document.getElementById("tbl-wrap").classList.remove("hidden");
+}
+
+// ── Render Table ──────────────────────────────────────────────
+function renderTable(){
+  const tbody = document.getElementById("stock-tbody");
+  tbody.innerHTML="";
+  if(!stockData.length){
+    tbody.innerHTML=`<tr><td colspan="7" class="text-center py-12 text-gray-500">ไม่มีรายการในหมวดนี้</td></tr>`;
+    return;
+  }
+  stockData.forEach((item,i)=>{
+    const st  = Number(item.stock);
+    const isRed    = st<=Number(item.minRed);
+    const isYellow = !isRed && st<=Number(item.minYellow);
+    const badgeCls = isRed?"badge-red":isYellow?"badge-yellow":"badge-ok";
+    const badgeTxt = isRed?"🔴 วิกฤต":isYellow?"🟡 เหลือน้อย":"✅ ปกติ";
+    const tr=document.createElement("tr");
+    tr.className="tbl-row transition";
+    tr.innerHTML=`
+      <td class="px-3 py-3 text-center text-gray-500 text-xs">${i+1}</td>
+      <td class="px-3 py-3 font-medium">${item.name}</td>
+      <td class="px-3 py-3 text-center">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold ${badgeCls} mono">${st}</span>
+      </td>
+      <td class="px-3 py-3 text-center text-gray-400 text-xs">${item.unit}</td>
+      <td class="px-3 py-3 text-center">
+        <input type="number" min="0" max="${st}" step="1"
+          id="qty-${item.id}" placeholder="0"
+          class="qty-inp mono w-16 bg-gray-800 border border-gray-700 focus:border-blue-500 rounded-lg px-2 py-1.5 text-sm text-center focus:outline-none"
+          onchange="updateSelected('${item.id}')"/>
+      </td>
+      <td class="px-3 py-3">
+        <input type="text" id="reason-${item.id}" placeholder="สาเหตุการใช้..."
+          class="w-full bg-gray-800 border border-gray-700 focus:border-blue-500 rounded-lg px-2 py-1.5 text-xs focus:outline-none"/>
+      </td>
+      <td class="px-3 py-3 text-center">
+        <input type="checkbox" id="chk-${item.id}" class="w-4 h-4 accent-blue-500 cursor-pointer" onchange="updateSelected('${item.id}')"/>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+  updateSelectedCount();
+}
+
+// ── Selection ─────────────────────────────────────────────────
+function updateSelected(id){
+  const qty = parseInt(document.getElementById("qty-"+id)?.value)||0;
+  const chk = document.getElementById("chk-"+id);
+  if(qty>0 && chk) chk.checked=true;
+  updateSelectedCount();
+}
+function updateSelectedCount(){
+  const checked = document.querySelectorAll("[id^='chk-']:checked").length;
+  document.getElementById("selected-count").textContent=checked;
+}
+function selectAll(){
+  stockData.forEach(item=>{
+    const chk=document.getElementById("chk-"+item.id);
+    if(chk){chk.checked=true;}
+    const qty=document.getElementById("qty-"+item.id);
+    if(qty&&!qty.value)qty.value=1;
+  });
+  updateSelectedCount();
+}
+function clearAll(){
+  stockData.forEach(item=>{
+    const c=document.getElementById("chk-"+item.id);if(c)c.checked=false;
+    const q=document.getElementById("qty-"+item.id);if(q)q.value="";
+    const r=document.getElementById("reason-"+item.id);if(r)r.value="";
+  });
+  updateSelectedCount();
+}
+
+// ── Submit Cuts ───────────────────────────────────────────────
+function submitCuts(){
+  const cuts=[];
+  stockData.forEach(item=>{
+    const chk = document.getElementById("chk-"+item.id);
+    if(chk?.checked){
+      const qty    = parseInt(document.getElementById("qty-"+item.id)?.value)||0;
+      const reason = document.getElementById("reason-"+item.id)?.value||"";
+      if(qty>0) cuts.push({id:item.id,name:item.name,qty,reason,current:Number(item.stock)});
+    }
+  });
+  if(!cuts.length){showToast("เลือกรายการและกรอกจำนวนก่อนครับ","warn");return;}
+  pendingCuts=cuts;
+  // Show confirm
+  const list=document.getElementById("confirm-list");
+  list.innerHTML=cuts.map(c=>`
+    <div class="flex justify-between items-center py-1 border-b border-gray-700/50 last:border-0">
+      <span class="text-white">${c.name}</span>
+      <div class="text-right">
+        <span class="text-red-400 font-bold mono">-${c.qty}</span>
+        <span class="text-gray-500 text-xs ml-1">${c.reason?`(${c.reason})`:"—"}</span>
+      </div>
+    </div>`).join("");
+  document.getElementById("confirm-modal").classList.remove("hidden");
+}
+
+async function confirmCut(){
+  closeConfirm();
+  showToast("กำลังบันทึก...","info");
+  const r = await api("cutStock",{cuts:pendingCuts,user:"operator"});
+  if(r.ok){
+    showToast("✅ ตัดสต็อกสำเร็จ "+pendingCuts.length+" รายการ","ok");
+    clearAll();
+    loadStock(currentCat,true);
+  } else {
+    showToast("❌ เกิดข้อผิดพลาด: "+(r.error||""),"err");
+  }
+}
+function closeConfirm(){document.getElementById("confirm-modal").classList.add("hidden");}
+
+// ── PIN Modal ─────────────────────────────────────────────────
+let pinBuffer="";
+function openPIN(mode){
+  pinMode=mode; pinBuffer="";
+  document.getElementById("pin-err").textContent="";
+  document.getElementById("pin-title").textContent = mode==="config"?"⚙️ ตั้งค่าระบบ":"🔐 Supervisor Login";
+  updatePinDots();
+  document.getElementById("pin-modal").classList.remove("hidden");
+}
+function pinClose(){document.getElementById("pin-modal").classList.add("hidden");pinBuffer="";}
+function pinDel(){if(pinBuffer.length){pinBuffer=pinBuffer.slice(0,-1);updatePinDots();}}
+function updatePinDots(){for(let i=0;i<4;i++)document.getElementById("pd"+i)?.classList.toggle("filled",i<pinBuffer.length);}
+function pinKey(d){
+  if(pinBuffer.length>=4)return;
+  pinBuffer+=d; updatePinDots();
+  if(pinBuffer.length===4)setTimeout(submitPIN,120);
+}
+async function submitPIN(){
+  const r = await api("verifyPin",{pin:pinBuffer});
+  if(r.ok){
+    isSupervisor=true; svPIN=pinBuffer;
+    pinClose();
+    if(pinMode==="supervisor"||pinMode==="config") openSvPanel();
+    else showToast("✅ Supervisor verified","ok");
+  } else {
+    document.getElementById("pin-err").textContent="❌ PIN ไม่ถูกต้อง";
+    pinBuffer=""; updatePinDots();
+  }
+}
+
+// ── Supervisor Panel ──────────────────────────────────────────
+function openSvPanel(){
+  document.getElementById("sv-panel").classList.remove("hidden");
+  document.getElementById("sv-cat-label").textContent=currentCat;
+  document.getElementById("sv-welcome-msg").value=document.getElementById("welcome-msg")?.textContent||"";
+  renderSvTable();
+}
+function closeSvPanel(){document.getElementById("sv-panel").classList.add("hidden");}
+function renderSvTable(){
+  const tbody=document.getElementById("sv-tbody");tbody.innerHTML="";
+  (stockData||[]).forEach(item=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML=`
+      <td class="py-2 pr-2 text-sm">${item.name}</td>
+      <td class="py-2 px-1"><input type="number" value="${item.stock}" id="sv-s-${item.id}" class="w-20 mono bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-center focus:border-green-500 focus:outline-none"/></td>
+      <td class="py-2 px-1"><input type="number" value="${item.minYellow}" id="sv-y-${item.id}" class="w-14 mono bg-gray-700 border border-yellow-700/50 rounded px-2 py-1 text-sm text-center focus:border-yellow-400 focus:outline-none"/></td>
+      <td class="py-2 px-1"><input type="number" value="${item.minRed}" id="sv-r-${item.id}" class="w-14 mono bg-gray-700 border border-red-700/50 rounded px-2 py-1 text-sm text-center focus:border-red-400 focus:outline-none"/></td>
+      <td class="py-2 px-1 text-center"><button onclick="svSave('${item.id}')" class="px-3 py-1 bg-green-700 hover:bg-green-600 rounded text-xs font-semibold transition">บันทึก</button></td>
+      <td class="py-2 px-1 text-center"><button onclick="svDelete('${item.id}','${item.name}')" class="px-2 py-1 bg-red-900/60 hover:bg-red-800 rounded text-xs text-red-400 hover:text-red-200 transition">🗑</button></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+async function svSave(id){
+  const stock     = parseInt(document.getElementById("sv-s-"+id)?.value)||0;
+  const minYellow = parseInt(document.getElementById("sv-y-"+id)?.value)||5;
+  const minRed    = parseInt(document.getElementById("sv-r-"+id)?.value)||2;
+  const r = await api("updateStock",{pin:svPIN, id, stock, minYellow, minRed});
+  if(r.ok){showToast("✅ บันทึกสำเร็จ","ok");loadStock(currentCat,true);}
+  else showToast("❌ "+(r.error||""),"err");
+}
+
+async function svDelete(id,name){
+  if(!confirm(`ต้องการลบ "${name}" หรือไม่?`))return;
+  const r = await api("deleteItem",{pin:svPIN, id});
+  if(r.ok){showToast("🗑 ลบรายการสำเร็จ","ok");closeSvPanel();loadStock(currentCat,true);}
+  else showToast("❌ "+(r.error||""),"err");
+}
+
+async function svAddItem(){
+  const name = document.getElementById("sv-new-name")?.value.trim();
+  const cat  = document.getElementById("sv-new-cat")?.value;
+  const stock= parseInt(document.getElementById("sv-new-stock")?.value)||0;
+  const unit = document.getElementById("sv-new-unit")?.value||"ชิ้น";
+  const minY = parseInt(document.getElementById("sv-new-yellow")?.value)||5;
+  const minR = parseInt(document.getElementById("sv-new-red")?.value)||2;
+  if(!name){showToast("กรอกชื่อรายการด้วยครับ","warn");return;}
+  const r = await api("addItem",{pin:svPIN, category:cat, name, stock, unit, minYellow:minY, minRed:minR});
+  if(r.ok){
+    showToast("✅ เพิ่มรายการสำเร็จ","ok");
+    document.getElementById("sv-new-name").value="";
+    document.getElementById("sv-new-stock").value="";
+    loadStock(cat,true);
+    currentCat=cat;
+    document.getElementById("sv-cat-label").textContent=cat;
+  } else showToast("❌ "+(r.error||""),"err");
+}
+
+async function svSaveMsg(){
+  const msg = document.getElementById("sv-welcome-msg")?.value.trim();
+  if(!msg)return;
+  const r = await api("saveConfig",{pin:svPIN, key:"WelcomeMsg", value:msg});
+  if(r.ok){document.getElementById("welcome-msg").textContent=msg;showToast("✅ บันทึกข้อความสำเร็จ","ok");}
+  else showToast("❌ "+(r.error||""),"err");
+}
+
+// ── Toast ─────────────────────────────────────────────────────
+function showToast(msg,type="ok"){
+  const t=document.getElementById("toast");
+  t.textContent=msg;
+  t.className="fixed bottom-6 left-1/2 -translate-x-1/2 px-6 py-3 rounded-2xl font-semibold text-sm z-[100] shadow-2xl text-white transition-all duration-300";
+  if(type==="ok")    t.style.background="#166534";
+  else if(type==="err")  t.style.background="#7f1d1d";
+  else if(type==="warn") t.style.background="#854d0e";
+  else t.style.background="#1e40af";
+  t.style.opacity="1"; t.style.transform="translateX(-50%) translateY(0)";
+  setTimeout(()=>{t.style.opacity="0";t.style.transform="translateX(-50%) translateY(16px)";},2800);
+}
+
+// ── Clock ─────────────────────────────────────────────────────
+function startClock(){
+  const clk=document.getElementById("welcome-clock");
+  if(!clk)return;
+  const tick=()=>{clk.textContent=new Date().toLocaleString("th-TH",{hour12:false,year:"numeric",month:"long",day:"numeric",hour:"2-digit",minute:"2-digit",second:"2-digit"});};
+  tick();setInterval(tick,1000);
+}
+
+// ── Init ──────────────────────────────────────────────────────
+(async()=>{
+  startClock();
+  await loadConfig();
+})();
+</script>
+</body>
+</html>
