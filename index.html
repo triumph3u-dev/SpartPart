@@ -7,225 +7,244 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
 <style>
-body{font-family:'Sarabun',sans-serif}
-
-/* ── Themes ─────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════
+   CSS VARIABLES — controlled by theme engine
+   ══════════════════════════════════════════ */
 :root {
-  --bg-950:#030712;--bg-900:#111827;--bg-800:#1f2937;--bg-700:#374151;
-  --border:#374151;--text:#f9fafb;--text-muted:#9ca3af;
-  --accent:#3b82f6;--accent-h:#2563eb;--accent-glow:rgba(59,130,246,.4);
-  --grad1:#0a1628;--grad2:#0F4C81;--grad3:#1a3a6b;
-  --badge-ok-bg:#166534;--badge-ok-txt:#bbf7d0;
-  --badge-y-bg:#854d0e;--badge-y-txt:#fef08a;
-  --badge-r-bg:#7f1d1d;--badge-r-txt:#fecaca;
-}
-[data-theme="ocean"] {
-  --bg-950:#020c18;--bg-900:#041525;--bg-800:#062035;--bg-700:#0a3050;
-  --border:#0a3050;--text:#e0f2fe;--text-muted:#7dd3fc;
-  --accent:#06b6d4;--accent-h:#0891b2;--accent-glow:rgba(6,182,212,.4);
-  --grad1:#020c18;--grad2:#0c4a6e;--grad3:#075985;
-}
-[data-theme="forest"] {
-  --bg-950:#020f06;--bg-900:#052010;--bg-800:#083a1a;--bg-700:#0f5a28;
-  --border:#0f5a28;--text:#dcfce7;--text-muted:#86efac;
-  --accent:#22c55e;--accent-h:#16a34a;--accent-glow:rgba(34,197,94,.4);
-  --grad1:#020f06;--grad2:#14532d;--grad3:#166534;
-}
-[data-theme="sunset"] {
-  --bg-950:#120508;--bg-900:#1f0a10;--bg-800:#38111e;--bg-700:#5a1a2e;
-  --border:#5a1a2e;--text:#fce7f3;--text-muted:#f9a8d4;
-  --accent:#f43f5e;--accent-h:#e11d48;--accent-glow:rgba(244,63,94,.4);
-  --grad1:#120508;--grad2:#881337;--grad3:#9f1239;
-}
-[data-theme="purple"] {
-  --bg-950:#0a0514;--bg-900:#130a20;--bg-800:#1e1030;--bg-700:#2d1a4a;
-  --border:#2d1a4a;--text:#f3e8ff;--text-muted:#c084fc;
-  --accent:#a855f7;--accent-h:#9333ea;--accent-glow:rgba(168,85,247,.4);
-  --grad1:#0a0514;--grad2:#4a1d96;--grad3:#5b21b6;
-}
-[data-theme="gold"] {
-  --bg-950:#0c0a02;--bg-900:#1a1505;--bg-800:#2d230a;--bg-700:#4a3810;
-  --border:#4a3810;--text:#fefce8;--text-muted:#fde047;
-  --accent:#eab308;--accent-h:#ca8a04;--accent-glow:rgba(234,179,8,.4);
-  --grad1:#0c0a02;--grad2:#713f12;--grad3:#78350f;
-}
-[data-theme="slate"] {
-  --bg-950:#020617;--bg-900:#0f172a;--bg-800:#1e293b;--bg-700:#334155;
-  --border:#334155;--text:#f1f5f9;--text-muted:#94a3b8;
-  --accent:#818cf8;--accent-h:#6366f1;--accent-glow:rgba(129,140,248,.4);
-  --grad1:#020617;--grad2:#1e1b4b;--grad3:#312e81;
-}
-[data-theme="light"] {
-  --bg-950:#f8fafc;--bg-900:#f1f5f9;--bg-800:#e2e8f0;--bg-700:#cbd5e1;
-  --border:#cbd5e1;--text:#0f172a;--text-muted:#475569;
-  --accent:#3b82f6;--accent-h:#2563eb;--accent-glow:rgba(59,130,246,.2);
-  --grad1:#1e3a5f;--grad2:#1e40af;--grad3:#1d4ed8;
-  --badge-ok-bg:#dcfce7;--badge-ok-txt:#166534;
-  --badge-y-bg:#fef9c3;--badge-y-txt:#854d0e;
-  --badge-r-bg:#fee2e2;--badge-r-txt:#991b1b;
+  --bg0:#030712; --bg1:#111827; --bg2:#1f2937; --bg3:#374151;
+  --bdr:#374151; --txt:#f9fafb; --txt2:#9ca3af;
+  --acc:#3b82f6; --acc2:#2563eb; --glow:rgba(59,130,246,.35);
+  --g1:#0a1628; --g2:#0F4C81; --g3:#1a3a6b;
+  --bg-img:none; --bg-overlay:rgba(0,0,0,.55);
+  --ok-bg:#166534; --ok-txt:#bbf7d0;
+  --yw-bg:#854d0e; --yw-txt:#fef08a;
+  --rd-bg:#7f1d1d; --rd-txt:#fecaca;
+  --card-bg:rgba(17,24,39,.85);
+  --inp-bg:rgba(31,41,55,.9);
+  --radius:0.75rem;
 }
 
-/* Apply theme vars */
-body { background: var(--bg-950); color: var(--text); }
-.grad-bg { background: linear-gradient(135deg, var(--grad1) 0%, var(--grad2) 50%, var(--grad3) 100%) !important; }
-.glow { box-shadow: 0 0 30px var(--accent-glow) !important; }
-.badge-ok { background: var(--badge-ok-bg) !important; color: var(--badge-ok-txt) !important; }
-.badge-yellow { background: var(--badge-y-bg) !important; color: var(--badge-y-txt) !important; }
-.badge-red { background: var(--badge-r-bg) !important; color: var(--badge-r-txt) !important; }
+/* ── Base ── */
+body { font-family:'Sarabun',sans-serif; background-color:var(--bg0); color:var(--txt); min-height:100vh; }
+.mono { font-family:'JetBrains Mono',monospace; }
 
-/* Theme picker */
-.theme-picker { position:fixed;bottom:20px;right:20px;z-index:300; }
-.theme-toggle-btn {
-  width:42px;height:42px;border-radius:50%;
-  background:var(--bg-800);border:1.5px solid var(--border);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;font-size:18px;
-  box-shadow:0 4px 16px rgba(0,0,0,.4);
-  transition:.2s;
+/* ── Gradient BG ── */
+.grad-bg {
+  background-image: var(--bg-img), linear-gradient(135deg, var(--g1) 0%, var(--g2) 50%, var(--g3) 100%);
+  background-size: cover;
+  background-position: center;
+  position: relative;
 }
-.theme-toggle-btn:hover { transform:scale(1.1); }
+.grad-bg::before {
+  content:''; position:absolute; inset:0;
+  background: var(--bg-img) == none ? transparent : var(--bg-overlay);
+  pointer-events:none;
+}
+
+/* ── Dynamic bg colors ── */
+.bg-d0  { background-color: var(--bg0) !important; }
+.bg-d1  { background-color: var(--bg1) !important; }
+.bg-d2  { background-color: var(--bg2) !important; }
+.bg-d3  { background-color: var(--bg3) !important; }
+.bdr-c  { border-color: var(--bdr) !important; }
+.txt-c  { color: var(--txt) !important; }
+.txt2-c { color: var(--txt2) !important; }
+.acc-bg { background-color: var(--acc) !important; }
+.acc-txt{ color: var(--acc) !important; }
+
+/* ── Cards with backdrop ── */
+.theme-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--bdr);
+  border-radius: var(--radius);
+}
+
+/* ── Inputs ── */
+.theme-inp {
+  background: var(--inp-bg) !important;
+  border-color: var(--bdr) !important;
+  color: var(--txt) !important;
+  backdrop-filter: blur(4px);
+}
+.theme-inp:focus { border-color: var(--acc) !important; outline:none; }
+
+/* ── Buttons ── */
+.btn-acc { background: var(--acc); color:#fff; border:none; }
+.btn-acc:hover { background: var(--acc2); }
+.glow-acc { box-shadow: 0 0 28px var(--glow); }
+
+/* ── Stock badges ── */
+.badge-ok { background:var(--ok-bg); color:var(--ok-txt); }
+.badge-yw { background:var(--yw-bg); color:var(--yw-txt); }
+.badge-rd { background:var(--rd-bg); color:var(--rd-txt); animation:pulse-r 1.4s infinite; }
+@keyframes pulse-r { 0%,100%{opacity:1} 50%{opacity:.6} }
+
+/* ── Sidebar ── */
+.sidebar-bg { background: var(--bg1); border-right: 1px solid var(--bdr); }
+.sb-item { color: var(--txt2); border-left: 3px solid transparent; transition:.15s; }
+.sb-item:hover { background: var(--bg2); color: var(--txt); }
+.sb-active { background: rgba(59,130,246,.15); border-left-color: var(--acc) !important; color: var(--acc); font-weight:600; }
+
+/* ── Topbar ── */
+.topbar-bg { background: var(--bg1); border-bottom: 1px solid var(--bdr); }
+
+/* ── Table ── */
+.tbl-head { background: var(--bg1); color: var(--txt2); }
+.tbl-row td { border-bottom: 1px solid var(--bdr); }
+.tbl-row:hover td { background: rgba(59,130,246,.06); }
+
+/* ── PIN dots ── */
+.pin-dot { width:14px;height:14px;border-radius:50%;border:2px solid var(--bdr);background:transparent;transition:.2s; }
+.pin-dot.filled { background:var(--acc);border-color:var(--acc); }
+
+/* ── Screen system ── */
+.screen { display:none; }
+.screen.active { display:flex; }
+
+/* ── Animations ── */
+@keyframes sUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+.slide-up { animation: sUp .35s ease forwards; }
+.cat-btn { transition:all .2s; }
+.cat-btn:hover { transform:translateY(-4px); }
+.cat-btn:active { transform:scale(.97); }
+
+/* ── Toast ── */
+#toast { transition:all .3s; pointer-events:none; }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width:4px; height:4px; }
+::-webkit-scrollbar-track { background: var(--bg0); }
+::-webkit-scrollbar-thumb { background: var(--bg3); border-radius:2px; }
+
+/* ══ THEME BUILDER PANEL ══ */
+.tb-panel {
+  position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,.7);backdrop-filter:blur(6px);
+  display:flex;align-items:center;justify-content:center;padding:16px;
+}
+.tb-box {
+  background: var(--bg1); border:1px solid var(--bdr); border-radius:20px;
+  width:100%;max-width:680px;max-height:90vh;overflow-y:auto;padding:24px;
+}
+.tb-section { margin-bottom:20px; }
+.tb-section h4 { font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--txt2);margin-bottom:10px; }
+.color-row { display:flex;gap:10px;align-items:center;flex-wrap:wrap; }
+.color-field { display:flex;flex-direction:column;gap:4px;align-items:center; }
+.color-field label { font-size:10px;color:var(--txt2); }
+.color-field input[type=color] { width:42px;height:42px;border-radius:10px;border:2px solid var(--bdr);cursor:pointer;padding:2px; }
+.swatch-grid { display:grid;grid-template-columns:repeat(auto-fill,40px);gap:8px; }
+.swatch { width:40px;height:40px;border-radius:10px;cursor:pointer;border:2px solid transparent;transition:.15s; }
+.swatch:hover { transform:scale(1.1); }
+.swatch.selected { border-color:var(--txt); box-shadow:0 0 0 2px var(--acc); }
+
+/* Theme selector panel (for all users) */
 .theme-panel {
-  display:none;position:absolute;bottom:52px;right:0;
-  background:var(--bg-900);border:1px solid var(--border);
-  border-radius:16px;padding:14px;width:200px;
+  position:fixed;bottom:70px;right:16px;z-index:150;
+  background:var(--bg1);border:1px solid var(--bdr);
+  border-radius:16px;padding:14px;width:220px;
   box-shadow:0 8px 32px rgba(0,0,0,.5);
+  display:none;
 }
 .theme-panel.open { display:block; }
-.theme-panel h4 { font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:10px; }
-.theme-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:6px; }
-.theme-swatch {
-  width:36px;height:36px;border-radius:50%;cursor:pointer;
-  border:2px solid transparent;transition:.15s;
-  display:flex;align-items:center;justify-content:center;font-size:13px;
+.theme-card-mini {
+  display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;
+  cursor:pointer;transition:.15s;border:1.5px solid transparent;
 }
-.theme-swatch:hover { transform:scale(1.15); }
-.theme-swatch.active { border-color:white;box-shadow:0 0 0 2px var(--accent); }
-.theme-swatch.light-swatch { border-color:var(--border); }
-
-.mono{font-family:'JetBrains Mono',monospace}
-.screen{display:none}
-.screen.active{display:flex}
-.grad-bg{background:linear-gradient(135deg,#0a1628 0%,#0F4C81 50%,#1a3a6b 100%)}
-.glow{box-shadow:0 0 30px rgba(59,130,246,.4)}
-.cat-btn{transition:all .2s ease}
-.cat-btn:hover{transform:translateY(-4px)}
-.cat-btn:active{transform:translateY(0) scale(.97)}
-.badge-ok{background:#166534;color:#bbf7d0}
-.badge-yellow{background:#854d0e;color:#fef08a}
-.badge-red{background:#7f1d1d;color:#fecaca;animation:pr 1.5s infinite}
-@keyframes pr{0%,100%{opacity:1}50%{opacity:.6}}
-.tbl-row:hover td{background:rgba(59,130,246,.08)}
-.pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid #4b5563;background:transparent;transition:.2s}
-.pin-dot.filled{background:#3b82f6;border-color:#3b82f6;box-shadow:0 0 8px rgba(59,130,246,.6)}
-.pin-key{transition:.1s;user-select:none}
-.pin-key:active{transform:scale(.93)}
-@keyframes sUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-.slide-up{animation:sUp .4s ease forwards}
-.sb-active{background:rgba(59,130,246,.2);border-left:3px solid #3b82f6;color:#93c5fd}
-::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-track{background:#1e293b}
-::-webkit-scrollbar-thumb{background:#475569;border-radius:2px}
+.theme-card-mini:hover { background:var(--bg2); }
+.theme-card-mini.active { border-color:var(--acc);background:rgba(59,130,246,.1); }
+.theme-preview { width:32px;height:32px;border-radius:8px;flex-shrink:0; }
+.theme-fab {
+  position:fixed;bottom:16px;right:16px;z-index:149;
+  width:48px;height:48px;border-radius:50%;
+  background:var(--acc);color:#fff;font-size:20px;
+  border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px var(--glow);transition:.2s;
+}
+.theme-fab:hover { transform:scale(1.1); }
 </style>
 </head>
-<body class="bg-gray-950 text-white min-h-screen">
+<body>
 
-<!-- SCREEN 1: Welcome -->
+<!-- ══ SCREEN 1: Welcome ══════════════════════════════════════ -->
 <div id="scr-welcome" class="screen active grad-bg flex-col items-center justify-center min-h-screen relative overflow-hidden">
-  <div class="absolute w-96 h-96 rounded-full bg-blue-600 opacity-10 -top-20 -left-20 blur-3xl"></div>
-  <div class="absolute w-80 h-80 rounded-full bg-blue-400 opacity-10 -bottom-20 -right-20 blur-3xl"></div>
+  <div class="absolute inset-0 pointer-events-none" style="background:var(--bg-overlay)"></div>
   <div class="relative z-10 text-center px-8 slide-up">
-    <div class="w-24 h-24 rounded-3xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center mx-auto mb-8 glow">
+    <div class="w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-8 glow-acc" style="background:linear-gradient(135deg,var(--acc),var(--acc2))">
       <span class="text-4xl">🔧</span>
     </div>
-    <h1 class="text-6xl font-black tracking-tight mb-2 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent" id="app-name">NF3.</h1>
-    <p class="text-xl text-blue-200 font-light mb-2">Spare Part Stock Management</p>
-    <p class="text-base text-blue-300 mb-12" id="welcome-msg">กำลังโหลด...</p>
-    <button onclick="goToSelect()" class="px-12 py-4 bg-blue-600 hover:bg-blue-500 rounded-2xl text-xl font-bold tracking-wide transition-all glow hover:scale-105 active:scale-95">
+    <h1 class="text-6xl font-black tracking-tight mb-2" id="app-name" style="color:var(--txt)">NF3.</h1>
+    <p class="text-xl mb-2" style="color:var(--txt2)">Spare Part Stock Management</p>
+    <p class="text-base mb-12" id="welcome-msg" style="color:var(--txt2)">กำลังโหลด...</p>
+    <button onclick="goToSelect()" class="px-12 py-4 rounded-2xl text-xl font-bold tracking-wide transition-all btn-acc glow-acc hover:scale-105 active:scale-95">
       Start →
     </button>
   </div>
-  <div class="absolute bottom-8 text-blue-400 text-sm mono" id="welcome-clock"></div>
-  <button onclick="openPIN('config')" class="absolute top-6 right-6 text-blue-400 hover:text-white text-xs px-3 py-1 border border-blue-800 rounded-full hover:border-blue-500 transition">⚙ Supervisor</button>
+  <div class="absolute bottom-8 text-sm mono" id="welcome-clock" style="color:var(--txt2)"></div>
+  <button onclick="openPIN('sv')" class="absolute top-6 right-6 text-sm px-3 py-1 rounded-full border transition" style="color:var(--txt2);border-color:var(--bdr)">⚙ Supervisor</button>
 </div>
 
-<!-- SCREEN 2: Category Select -->
+<!-- ══ SCREEN 2: Category ════════════════════════════════════ -->
 <div id="scr-select" class="screen grad-bg flex-col items-center justify-start min-h-screen pt-16 pb-8 px-6">
-  <button onclick="goTo('welcome')" class="self-start text-blue-400 hover:text-white mb-6 text-sm flex items-center gap-2">← กลับ</button>
-  <div class="w-full max-w-3xl slide-up">
-    <h2 class="text-5xl font-black mb-2 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">Spare part.</h2>
-    <p class="text-blue-300 mb-10">เลือกประเภทอะไหล่ที่ต้องการจัดการ</p>
+  <div class="absolute inset-0 pointer-events-none" style="background:var(--bg-overlay)"></div>
+  <button onclick="goTo('welcome')" class="relative z-10 self-start mb-6 text-sm" style="color:var(--acc)">← กลับ</button>
+  <div class="relative z-10 w-full max-w-3xl slide-up">
+    <h2 class="text-5xl font-black mb-2" style="color:var(--txt)">Spare part.</h2>
+    <p class="mb-10" style="color:var(--txt2)">เลือกประเภทอะไหล่ที่ต้องการจัดการ</p>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <button onclick="goToStock('Sachet')" class="cat-btn flex flex-col items-center justify-center gap-3 p-6 rounded-2xl bg-gradient-to-br from-blue-900 to-blue-800 border border-blue-700 hover:border-blue-400 glow">
-        <span class="text-4xl">🔩</span><span class="text-lg font-bold">Sachet</span><span class="text-xs text-blue-300">SM9-12</span>
-      </button>
-      <button onclick="goToStock('Lina M')" class="cat-btn flex flex-col items-center justify-center gap-3 p-6 rounded-2xl bg-gradient-to-br from-purple-900 to-purple-800 border border-purple-700 hover:border-purple-400" style="box-shadow:0 0 20px rgba(168,85,247,.2)">
-        <span class="text-4xl">⚙️</span><span class="text-lg font-bold">Lina M</span><span class="text-xs text-purple-300">Medium Line</span>
-      </button>
-      <button onclick="goToStock('Lina L')" class="cat-btn flex flex-col items-center justify-center gap-3 p-6 rounded-2xl bg-gradient-to-br from-emerald-900 to-emerald-800 border border-emerald-700 hover:border-emerald-400" style="box-shadow:0 0 20px rgba(52,211,153,.2)">
-        <span class="text-4xl">🔧</span><span class="text-lg font-bold">Lina L</span><span class="text-xs text-emerald-300">Large Line</span>
-      </button>
-      <button onclick="goToStock('Mespack 570')" class="cat-btn flex flex-col items-center justify-center gap-3 p-6 rounded-2xl bg-gradient-to-br from-orange-900 to-orange-800 border border-orange-700 hover:border-orange-400" style="box-shadow:0 0 20px rgba(251,146,60,.2)">
-        <span class="text-4xl">🏭</span><span class="text-lg font-bold">Mespack 570</span><span class="text-xs text-orange-300">Mespack</span>
-      </button>
+      <button onclick="goToStock('Sachet')"     class="cat-btn theme-card flex flex-col items-center justify-center gap-3 p-6 rounded-2xl"><span class="text-4xl">🔩</span><span class="text-lg font-bold">Sachet</span><span class="text-xs" style="color:var(--txt2)">SM9-12</span></button>
+      <button onclick="goToStock('Lina M')"     class="cat-btn theme-card flex flex-col items-center justify-center gap-3 p-6 rounded-2xl"><span class="text-4xl">⚙️</span><span class="text-lg font-bold">Lina M</span><span class="text-xs" style="color:var(--txt2)">Medium Line</span></button>
+      <button onclick="goToStock('Lina L')"     class="cat-btn theme-card flex flex-col items-center justify-center gap-3 p-6 rounded-2xl"><span class="text-4xl">🔧</span><span class="text-lg font-bold">Lina L</span><span class="text-xs" style="color:var(--txt2)">Large Line</span></button>
+      <button onclick="goToStock('Mespack 570')" class="cat-btn theme-card flex flex-col items-center justify-center gap-3 p-6 rounded-2xl"><span class="text-4xl">🏭</span><span class="text-lg font-bold">Mespack 570</span><span class="text-xs" style="color:var(--txt2)">Mespack</span></button>
     </div>
     <div class="mt-10 grid grid-cols-3 gap-4 text-center">
-      <div class="bg-gray-900 border border-gray-700 rounded-xl p-4">
-        <div class="text-2xl font-black text-white" id="sum-total">—</div>
-        <div class="text-xs text-gray-400 mt-1">รายการทั้งหมด</div>
-      </div>
-      <div class="bg-yellow-900/30 border border-yellow-700/50 rounded-xl p-4">
-        <div class="text-2xl font-black text-yellow-400" id="sum-low">—</div>
-        <div class="text-xs text-yellow-500 mt-1">ใกล้หมด ⚠️</div>
-      </div>
-      <div class="bg-red-900/30 border border-red-700/50 rounded-xl p-4">
-        <div class="text-2xl font-black text-red-400" id="sum-crit">—</div>
-        <div class="text-xs text-red-500 mt-1">วิกฤต 🚨</div>
-      </div>
+      <div class="theme-card rounded-xl p-4"><div class="text-2xl font-black" id="sum-total">—</div><div class="text-xs mt-1" style="color:var(--txt2)">รายการทั้งหมด</div></div>
+      <div class="theme-card rounded-xl p-4"><div class="text-2xl font-black text-yellow-400" id="sum-low">—</div><div class="text-xs mt-1 text-yellow-500">ใกล้หมด ⚠️</div></div>
+      <div class="theme-card rounded-xl p-4"><div class="text-2xl font-black text-red-400" id="sum-crit">—</div><div class="text-xs mt-1 text-red-500">วิกฤต 🚨</div></div>
     </div>
   </div>
 </div>
 
-<!-- SCREEN 3: Stock Table -->
-<div id="scr-stock" class="screen flex-col min-h-screen bg-gray-950">
-  <div class="bg-gray-900 border-b border-gray-800 px-4 py-3 flex items-center justify-between sticky top-0 z-30">
+<!-- ══ SCREEN 3: Stock Table ═════════════════════════════════ -->
+<div id="scr-stock" class="screen flex-col min-h-screen bg-d0">
+  <div class="topbar-bg px-4 py-3 flex items-center justify-between sticky top-0 z-30">
     <div class="flex items-center gap-3">
-      <button onclick="goTo('select')" class="text-gray-400 hover:text-white p-1">←</button>
+      <button onclick="goTo('select')" style="color:var(--txt2)">←</button>
       <h2 class="text-lg font-bold" id="stock-title">Sachet</h2>
-      <span id="stock-cat-badge" class="text-xs px-2 py-0.5 rounded-full bg-blue-900 text-blue-200"></span>
+      <span id="stock-badge" class="text-xs px-2 py-0.5 rounded-full" style="background:var(--bg3);color:var(--txt2)"></span>
     </div>
     <div class="flex items-center gap-2">
-      <span id="last-update" class="text-xs text-gray-500 hidden md:block"></span>
-      <button onclick="loadStock(currentCat)" class="text-gray-400 hover:text-white text-sm p-1">🔄</button>
-      <button onclick="openPIN('supervisor')" class="text-xs px-3 py-1.5 border border-gray-700 hover:border-blue-500 text-gray-300 hover:text-white rounded-lg transition">⚙ จัดการ</button>
+      <span id="last-update" class="text-xs hidden md:block" style="color:var(--txt2)"></span>
+      <button onclick="loadStock(currentCat)" style="color:var(--txt2)">🔄</button>
+      <button onclick="openPIN('sv')" class="text-xs px-3 py-1.5 rounded-lg border transition" style="border-color:var(--bdr);color:var(--txt2)">⚙ จัดการ</button>
     </div>
   </div>
   <div class="flex flex-1 overflow-hidden">
-    <!-- Sidebar -->
-    <aside class="hidden md:flex flex-col w-48 bg-gray-900 border-r border-gray-800 py-4 gap-1 flex-shrink-0">
-      <button onclick="goTo('welcome')" class="text-left px-4 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg mx-2 transition">🏠 หน้าแรก</button>
-      <div class="h-px bg-gray-800 mx-4 my-1"></div>
-      <p class="text-xs text-gray-600 px-4 mb-1 uppercase tracking-wider">ประเภท</p>
-      <button id="sb-Sachet"      onclick="loadStock('Sachet')"      class="text-left px-4 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg mx-2 transition border-l-2 border-transparent">🔩 Sachet</button>
-      <button id="sb-Lina M"      onclick="loadStock('Lina M')"      class="text-left px-4 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg mx-2 transition border-l-2 border-transparent">⚙️ Lina M</button>
-      <button id="sb-Lina L"      onclick="loadStock('Lina L')"      class="text-left px-4 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg mx-2 transition border-l-2 border-transparent">🔧 Lina L</button>
-      <button id="sb-Mespack 570" onclick="loadStock('Mespack 570')" class="text-left px-4 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg mx-2 transition border-l-2 border-transparent">🏭 Mespack</button>
+    <aside class="hidden md:flex flex-col w-48 sidebar-bg py-4 gap-1 flex-shrink-0">
+      <button onclick="goTo('welcome')" class="sb-item text-left px-4 py-2.5 text-sm rounded-lg mx-2">🏠 หน้าแรก</button>
+      <div class="h-px mx-4 my-1" style="background:var(--bdr)"></div>
+      <p class="text-xs px-4 mb-1 uppercase tracking-wider" style="color:var(--txt2)">ประเภท</p>
+      <button id="sb-Sachet"       onclick="loadStock('Sachet')"      class="sb-item text-left px-4 py-2.5 text-sm rounded-lg mx-2 border-l-2 border-transparent">🔩 Sachet</button>
+      <button id="sb-Lina M"       onclick="loadStock('Lina M')"      class="sb-item text-left px-4 py-2.5 text-sm rounded-lg mx-2 border-l-2 border-transparent">⚙️ Lina M</button>
+      <button id="sb-Lina L"       onclick="loadStock('Lina L')"      class="sb-item text-left px-4 py-2.5 text-sm rounded-lg mx-2 border-l-2 border-transparent">🔧 Lina L</button>
+      <button id="sb-Mespack 570"  onclick="loadStock('Mespack 570')" class="sb-item text-left px-4 py-2.5 text-sm rounded-lg mx-2 border-l-2 border-transparent">🏭 Mespack</button>
     </aside>
-    <!-- Content -->
     <div class="flex-1 overflow-auto p-4">
       <div id="tbl-loading" class="flex flex-col items-center justify-center py-20 gap-4">
-        <div class="w-10 h-10 border-4 border-blue-800 border-t-blue-400 rounded-full animate-spin"></div>
-        <p class="text-gray-500">กำลังโหลดข้อมูล...</p>
+        <div class="w-10 h-10 border-4 rounded-full animate-spin" style="border-color:var(--bg3);border-top-color:var(--acc)"></div>
+        <p style="color:var(--txt2)">กำลังโหลด...</p>
       </div>
       <div id="tbl-error" class="hidden text-center py-16">
         <p class="text-4xl mb-3">⚠️</p>
         <p class="text-red-400 mb-4">โหลดข้อมูลไม่สำเร็จ</p>
-        <button onclick="loadStock(currentCat)" class="px-4 py-2 bg-blue-700 hover:bg-blue-600 rounded-lg text-sm">ลองอีกครั้ง</button>
+        <button onclick="loadStock(currentCat)" class="px-4 py-2 rounded-lg text-sm btn-acc">ลองอีกครั้ง</button>
       </div>
       <div id="tbl-wrap" class="hidden">
-        <div class="overflow-x-auto rounded-xl border border-gray-800">
+        <div class="overflow-x-auto rounded-xl border" style="border-color:var(--bdr)">
           <table class="w-full text-sm">
-            <thead>
-              <tr class="bg-gray-900 text-gray-400 text-xs uppercase tracking-wider">
+            <thead class="tbl-head">
+              <tr class="text-xs uppercase tracking-wider">
                 <th class="px-3 py-3 text-center w-10">#</th>
                 <th class="px-3 py-3 text-left">รายการ</th>
                 <th class="px-3 py-3 text-center">คงเหลือ</th>
@@ -235,17 +254,17 @@ body { background: var(--bg-950); color: var(--text); }
                 <th class="px-3 py-3 text-center w-16">เลือก</th>
               </tr>
             </thead>
-            <tbody id="stock-tbody" class="divide-y divide-gray-800/50"></tbody>
+            <tbody id="stock-tbody" class="divide-y" style="--tw-divide-opacity:1"></tbody>
           </table>
         </div>
-        <div class="mt-4 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between bg-gray-900 rounded-xl p-4 border border-gray-800">
-          <div class="flex items-center gap-3 text-sm text-gray-400">
-            <span id="selected-count" class="text-white font-semibold">0</span> รายการที่เลือก
-            <button onclick="clearAll()" class="text-xs text-gray-500 hover:text-red-400 transition ml-2">ล้างทั้งหมด</button>
+        <div class="mt-4 flex flex-col sm:flex-row gap-3 items-center justify-between theme-card p-4">
+          <div class="flex items-center gap-3 text-sm" style="color:var(--txt2)">
+            <span id="selected-count" style="color:var(--txt);font-weight:600">0</span> รายการที่เลือก
+            <button onclick="clearAll()" class="text-xs ml-2" style="color:var(--txt2)">ล้างทั้งหมด</button>
           </div>
           <div class="flex gap-3">
-            <button onclick="selectAll()" class="px-4 py-2 border border-gray-700 hover:border-gray-500 rounded-lg text-sm transition">เลือกทั้งหมด</button>
-            <button onclick="submitCuts()" class="px-6 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-sm font-bold transition flex items-center gap-2">✂️ ตัดสต็อก</button>
+            <button onclick="selectAll()" class="px-4 py-2 rounded-lg text-sm border" style="border-color:var(--bdr);color:var(--txt)">เลือกทั้งหมด</button>
+            <button onclick="submitCuts()" class="px-6 py-2 rounded-lg text-sm font-bold btn-acc">✂️ ตัดสต็อก</button>
           </div>
         </div>
       </div>
@@ -253,13 +272,13 @@ body { background: var(--bg-950); color: var(--text); }
   </div>
 </div>
 
-<!-- PIN Modal -->
-<div id="pin-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-  <div class="bg-gray-900 border border-gray-700 rounded-3xl p-8 w-full max-w-sm slide-up">
+<!-- ══ PIN Modal ═════════════════════════════════════════════ -->
+<div id="pin-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background:rgba(0,0,0,.75);backdrop-filter:blur(6px)">
+  <div class="theme-card p-8 w-full max-w-sm slide-up">
     <div class="text-center mb-6">
       <div class="text-4xl mb-3">🔐</div>
       <h3 class="text-xl font-bold" id="pin-title">Supervisor Login</h3>
-      <p class="text-gray-400 text-sm mt-1">กรอก PIN 4 หลัก</p>
+      <p class="text-sm mt-1" style="color:var(--txt2)">กรอก PIN 4 หลัก</p>
     </div>
     <div class="flex justify-center gap-4 mb-2">
       <div class="pin-dot" id="pd0"></div><div class="pin-dot" id="pd1"></div>
@@ -267,532 +286,681 @@ body { background: var(--bg-950); color: var(--text); }
     </div>
     <p class="text-center text-red-400 text-sm h-5 mb-3" id="pin-err"></p>
     <div class="grid grid-cols-3 gap-3">
-      <button class="pin-key py-4 text-xl font-bold rounded-xl bg-gray-800 hover:bg-blue-700 transition" onclick="pinKey('1')">1</button>
-      <button class="pin-key py-4 text-xl font-bold rounded-xl bg-gray-800 hover:bg-blue-700 transition" onclick="pinKey('2')">2</button>
-      <button class="pin-key py-4 text-xl font-bold rounded-xl bg-gray-800 hover:bg-blue-700 transition" onclick="pinKey('3')">3</button>
-      <button class="pin-key py-4 text-xl font-bold rounded-xl bg-gray-800 hover:bg-blue-700 transition" onclick="pinKey('4')">4</button>
-      <button class="pin-key py-4 text-xl font-bold rounded-xl bg-gray-800 hover:bg-blue-700 transition" onclick="pinKey('5')">5</button>
-      <button class="pin-key py-4 text-xl font-bold rounded-xl bg-gray-800 hover:bg-blue-700 transition" onclick="pinKey('6')">6</button>
-      <button class="pin-key py-4 text-xl font-bold rounded-xl bg-gray-800 hover:bg-blue-700 transition" onclick="pinKey('7')">7</button>
-      <button class="pin-key py-4 text-xl font-bold rounded-xl bg-gray-800 hover:bg-blue-700 transition" onclick="pinKey('8')">8</button>
-      <button class="pin-key py-4 text-xl font-bold rounded-xl bg-gray-800 hover:bg-blue-700 transition" onclick="pinKey('9')">9</button>
-      <button class="pin-key py-4 text-xl font-bold rounded-xl bg-red-900/50 hover:bg-red-800 text-red-400 transition" onclick="pinClose()">✕</button>
-      <button class="pin-key py-4 text-xl font-bold rounded-xl bg-gray-800 hover:bg-blue-700 transition" onclick="pinKey('0')">0</button>
-      <button class="pin-key py-4 text-xl font-bold rounded-xl bg-gray-800 hover:bg-gray-700 transition text-gray-300" onclick="pinDel()">⌫</button>
+      <script>
+        ['1','2','3','4','5','6','7','8','9'].forEach(function(n){
+          document.write('<button class="py-4 text-xl font-bold rounded-xl transition" style="background:var(--bg2);color:var(--txt)" onclick="pinKey(\''+n+'\')">'+n+'</button>');
+        });
+      </script>
+      <button class="py-4 text-xl font-bold rounded-xl transition text-red-400" style="background:var(--bg2)" onclick="pinClose()">✕</button>
+      <button class="py-4 text-xl font-bold rounded-xl transition" style="background:var(--bg2);color:var(--txt)" onclick="pinKey('0')">0</button>
+      <button class="py-4 text-xl font-bold rounded-xl transition" style="background:var(--bg2);color:var(--txt2)" onclick="pinDel()">⌫</button>
     </div>
   </div>
 </div>
 
-<!-- Supervisor Panel -->
-<div id="sv-panel" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-  <div class="bg-gray-900 border border-gray-700 rounded-3xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto slide-up">
-    <div class="flex justify-between items-center mb-6">
-      <h3 class="text-xl font-bold">⚙️ จัดการสต็อก (Supervisor)</h3>
-      <button onclick="closeSvPanel()" class="text-gray-400 hover:text-white text-xl">✕</button>
+<!-- ══ SUPERVISOR PANEL ════════════════════════════════════════ -->
+<div id="sv-panel" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background:rgba(0,0,0,.75);backdrop-filter:blur(6px)">
+  <div class="theme-card p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto slide-up">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-xl font-bold">⚙️ จัดการระบบ (Supervisor)</h3>
+      <button onclick="closeSvPanel()" style="color:var(--txt2);font-size:20px">✕</button>
     </div>
-    <!-- Add item -->
-    <div class="bg-gray-800 rounded-2xl p-4 mb-4">
-      <h4 class="font-semibold mb-3 text-blue-300">+ เพิ่มรายการใหม่</h4>
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-        <div class="col-span-2 md:col-span-3">
-          <label class="text-xs text-gray-400 mb-1 block">ชื่อรายการ</label>
-          <input id="sv-new-name" type="text" placeholder="เช่น ใบมีดตัด รุ่น XYZ" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"/>
+    <!-- Tabs -->
+    <div class="flex gap-2 mb-5 border-b" style="border-color:var(--bdr)">
+      <button onclick="svTab('stock')" id="tab-stock" class="px-4 py-2 text-sm font-semibold border-b-2 -mb-px transition" style="border-color:var(--acc);color:var(--acc)">📦 สต็อก</button>
+      <button onclick="svTab('theme')" id="tab-theme" class="px-4 py-2 text-sm font-semibold border-b-2 -mb-px transition" style="border-color:transparent;color:var(--txt2)">🎨 ธีม</button>
+      <button onclick="svTab('msg')"   id="tab-msg"   class="px-4 py-2 text-sm font-semibold border-b-2 -mb-px transition" style="border-color:transparent;color:var(--txt2)">💬 ข้อความ</button>
+    </div>
+
+    <!-- Tab: Stock -->
+    <div id="sv-tab-stock">
+      <div class="rounded-2xl p-4 mb-4" style="background:var(--bg2)">
+        <h4 class="font-semibold mb-3" style="color:var(--acc)">+ เพิ่มรายการใหม่</h4>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+          <div class="col-span-2 md:col-span-3">
+            <label class="text-xs mb-1 block" style="color:var(--txt2)">ชื่อรายการ</label>
+            <input id="sv-new-name" type="text" placeholder="เช่น ใบมีดตัด รุ่น XYZ" class="theme-inp w-full rounded-lg px-3 py-2 text-sm"/>
+          </div>
+          <div><label class="text-xs mb-1 block" style="color:var(--txt2)">ประเภท</label>
+            <select id="sv-new-cat" class="theme-inp w-full rounded-lg px-3 py-2 text-sm">
+              <option>Sachet</option><option>Lina M</option><option>Lina L</option><option>Mespack 570</option>
+            </select></div>
+          <div><label class="text-xs mb-1 block" style="color:var(--txt2)">จำนวนเริ่มต้น</label>
+            <input id="sv-new-stock" type="number" placeholder="0" class="theme-inp w-full rounded-lg px-3 py-2 text-sm mono"/></div>
+          <div><label class="text-xs mb-1 block" style="color:var(--txt2)">หน่วย</label>
+            <input id="sv-new-unit" type="text" value="ชิ้น" class="theme-inp w-full rounded-lg px-3 py-2 text-sm"/></div>
+          <div><label class="text-xs mb-1 block" style="color:var(--txt2)">เกณฑ์เหลือน้อย 🟡</label>
+            <input id="sv-new-yellow" type="number" placeholder="5" class="theme-inp w-full rounded-lg px-3 py-2 text-sm mono"/></div>
+          <div><label class="text-xs mb-1 block" style="color:var(--txt2)">เกณฑ์วิกฤต 🔴</label>
+            <input id="sv-new-red" type="number" placeholder="2" class="theme-inp w-full rounded-lg px-3 py-2 text-sm mono"/></div>
         </div>
-        <div>
-          <label class="text-xs text-gray-400 mb-1 block">ประเภท</label>
-          <select id="sv-new-cat" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none">
-            <option>Sachet</option><option>Lina M</option><option>Lina L</option><option>Mespack 570</option>
-          </select>
-        </div>
-        <div>
-          <label class="text-xs text-gray-400 mb-1 block">จำนวนเริ่มต้น</label>
-          <input id="sv-new-stock" type="number" placeholder="0" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none mono"/>
-        </div>
-        <div>
-          <label class="text-xs text-gray-400 mb-1 block">หน่วย</label>
-          <input id="sv-new-unit" type="text" placeholder="ชิ้น" value="ชิ้น" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"/>
-        </div>
-        <div>
-          <label class="text-xs text-gray-400 mb-1 block">เกณฑ์เหลือน้อย 🟡</label>
-          <input id="sv-new-yellow" type="number" placeholder="5" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none mono"/>
-        </div>
-        <div>
-          <label class="text-xs text-gray-400 mb-1 block">เกณฑ์วิกฤต 🔴</label>
-          <input id="sv-new-red" type="number" placeholder="2" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none mono"/>
+        <button onclick="svAddItem()" class="mt-3 px-5 py-2 rounded-lg text-sm font-semibold btn-acc">+ เพิ่มรายการ</button>
+      </div>
+      <div class="rounded-2xl p-4" style="background:var(--bg2)">
+        <h4 class="font-semibold mb-3 text-green-400">✏️ แก้ไขสต็อก (<span id="sv-cat-label"></span>)</h4>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead><tr class="text-xs" style="color:var(--txt2)">
+              <th class="text-left pb-2 pr-2">รายการ</th><th class="text-center pb-2 w-20">สต็อก</th>
+              <th class="text-center pb-2 w-14">🟡</th><th class="text-center pb-2 w-14">🔴</th>
+              <th class="text-center pb-2 w-16">บันทึก</th><th class="text-center pb-2 w-10">ลบ</th>
+            </tr></thead>
+            <tbody id="sv-tbody"></tbody>
+          </table>
         </div>
       </div>
-      <button onclick="svAddItem()" class="mt-3 px-5 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-sm font-semibold transition">+ เพิ่มรายการ</button>
     </div>
-    <!-- Edit items -->
-    <div class="bg-gray-800 rounded-2xl p-4 mb-4">
-      <h4 class="font-semibold mb-3 text-green-300">✏️ แก้ไขสต็อก (<span id="sv-cat-label"></span>)</h4>
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm">
-          <thead><tr class="text-gray-400 text-xs border-b border-gray-700">
-            <th class="text-left pb-2 pr-2">รายการ</th>
-            <th class="text-center pb-2 w-20">สต็อก</th>
-            <th class="text-center pb-2 w-16">🟡</th>
-            <th class="text-center pb-2 w-16">🔴</th>
-            <th class="text-center pb-2 w-16">บันทึก</th>
-            <th class="text-center pb-2 w-10">ลบ</th>
-          </tr></thead>
-          <tbody id="sv-tbody" class="divide-y divide-gray-700/50"></tbody>
-        </table>
+
+    <!-- Tab: Theme Builder -->
+    <div id="sv-tab-theme" class="hidden">
+      <div class="rounded-2xl p-5 mb-4" style="background:var(--bg2)">
+        <div class="flex justify-between items-center mb-4">
+          <h4 class="font-semibold" style="color:var(--acc)">🎨 สร้างธีมใหม่</h4>
+          <div class="flex gap-2">
+            <input id="tb-name" type="text" placeholder="ชื่อธีม..." class="theme-inp rounded-lg px-3 py-1.5 text-sm w-32"/>
+            <button onclick="saveBuilderTheme()" class="px-4 py-1.5 rounded-lg text-sm font-semibold btn-acc">บันทึกธีม</button>
+          </div>
+        </div>
+
+        <!-- Color pickers -->
+        <div class="tb-section">
+          <h4>🎨 สีหลัก</h4>
+          <div class="color-row">
+            <div class="color-field"><input type="color" id="tb-acc"  value="#3b82f6" oninput="livePreview()"><label>Accent</label></div>
+            <div class="color-field"><input type="color" id="tb-acc2" value="#2563eb" oninput="livePreview()"><label>Accent Hover</label></div>
+            <div class="color-field"><input type="color" id="tb-txt"  value="#f9fafb" oninput="livePreview()"><label>ตัวอักษร</label></div>
+            <div class="color-field"><input type="color" id="tb-txt2" value="#9ca3af" oninput="livePreview()"><label>ตัวอักษรรอง</label></div>
+          </div>
+        </div>
+
+        <div class="tb-section">
+          <h4>📦 สีพื้นหลัง</h4>
+          <div class="color-row">
+            <div class="color-field"><input type="color" id="tb-bg0" value="#030712" oninput="livePreview()"><label>พื้นหลัง</label></div>
+            <div class="color-field"><input type="color" id="tb-bg1" value="#111827" oninput="livePreview()"><label>Panel</label></div>
+            <div class="color-field"><input type="color" id="tb-bg2" value="#1f2937" oninput="livePreview()"><label>Card</label></div>
+            <div class="color-field"><input type="color" id="tb-bg3" value="#374151" oninput="livePreview()"><label>Input/Border</label></div>
+          </div>
+        </div>
+
+        <div class="tb-section">
+          <h4>🌅 สีพื้นหลัง Gradient (Welcome Screen)</h4>
+          <div class="color-row">
+            <div class="color-field"><input type="color" id="tb-g1" value="#0a1628" oninput="livePreview()"><label>Start</label></div>
+            <div class="color-field"><input type="color" id="tb-g2" value="#0F4C81" oninput="livePreview()"><label>Mid</label></div>
+            <div class="color-field"><input type="color" id="tb-g3" value="#1a3a6b" oninput="livePreview()"><label>End</label></div>
+          </div>
+        </div>
+
+        <div class="tb-section">
+          <h4>📸 รูปภาพพื้นหลัง (Welcome Screen)</h4>
+          <div class="flex gap-3 items-start flex-wrap">
+            <div>
+              <label class="text-xs mb-1 block" style="color:var(--txt2)">URL รูปภาพ</label>
+              <input id="tb-bg-img" type="text" placeholder="https://..." class="theme-inp rounded-lg px-3 py-2 text-sm w-72" oninput="livePreview()"/>
+              <p class="text-xs mt-1" style="color:var(--txt2)">วาง URL รูปจาก Google Photos, Unsplash ฯลฯ</p>
+            </div>
+            <div>
+              <label class="text-xs mb-1 block" style="color:var(--txt2)">ความเข้มของ Overlay</label>
+              <input id="tb-overlay" type="range" min="0" max="90" value="55" class="w-36 mt-1" oninput="livePreview()"/>
+              <p class="text-xs mt-1 mono" style="color:var(--txt2)" id="overlay-val">55%</p>
+            </div>
+          </div>
+          <!-- Quick image presets -->
+          <div class="mt-3">
+            <p class="text-xs mb-2" style="color:var(--txt2)">เลือกรูปสำเร็จรูป:</p>
+            <div class="flex gap-2 flex-wrap">
+              <button onclick="setPresetImg('https://images.unsplash.com/photo-1565043666747-69f6646db940?w=1920&q=80')" class="text-xs px-3 py-1.5 rounded-lg border" style="border-color:var(--bdr);color:var(--txt2)">🏭 โรงงาน</button>
+              <button onclick="setPresetImg('https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=1920&q=80')" class="text-xs px-3 py-1.5 rounded-lg border" style="border-color:var(--bdr);color:var(--txt2)">⚙️ อุตสาหกรรม</button>
+              <button onclick="setPresetImg('https://images.unsplash.com/photo-1518770660439-4636190af475?w=1920&q=80')" class="text-xs px-3 py-1.5 rounded-lg border" style="border-color:var(--bdr);color:var(--txt2)">🔵 Circuit</button>
+              <button onclick="setPresetImg('https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1920&q=80')" class="text-xs px-3 py-1.5 rounded-lg border" style="border-color:var(--bdr);color:var(--txt2)">🌃 Dark City</button>
+              <button onclick="setPresetImg('')" class="text-xs px-3 py-1.5 rounded-lg border text-red-400" style="border-color:var(--bdr)">✕ ลบรูป</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live preview bar -->
+        <div class="mt-4 rounded-xl p-3 flex items-center gap-3 text-sm" id="preview-bar" style="background:var(--bg3)">
+          <div class="w-8 h-8 rounded-lg" id="prev-acc"></div>
+          <div class="flex-1">
+            <div class="font-bold" id="prev-txt">NF3. Spare Part</div>
+            <div class="text-xs" id="prev-txt2">Preview สีที่เลือก</div>
+          </div>
+          <div class="w-16 h-6 rounded-full" id="prev-grad"></div>
+        </div>
+      </div>
+
+      <!-- Existing custom themes -->
+      <div class="rounded-2xl p-4" style="background:var(--bg2)">
+        <h4 class="font-semibold mb-3" style="color:var(--txt2)">ธีมที่สร้างแล้ว</h4>
+        <div id="custom-themes-list" class="grid grid-cols-2 gap-3"></div>
+        <p id="no-custom-themes" class="text-sm" style="color:var(--txt2)">ยังไม่มีธีมที่สร้าง</p>
       </div>
     </div>
-    <!-- Welcome msg -->
-    <div class="bg-gray-800 rounded-2xl p-4">
-      <h4 class="font-semibold mb-3 text-yellow-300">💬 แก้ไขข้อความหน้าแรก</h4>
-      <input id="sv-welcome-msg" type="text" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none mb-2"/>
-      <button onclick="svSaveMsg()" class="px-4 py-2 bg-yellow-600 hover:bg-yellow-500 rounded-lg text-sm font-semibold transition">บันทึกข้อความ</button>
+
+    <!-- Tab: Message -->
+    <div id="sv-tab-msg" class="hidden">
+      <div class="rounded-2xl p-4" style="background:var(--bg2)">
+        <h4 class="font-semibold mb-3 text-yellow-400">💬 แก้ไขข้อความหน้าแรก</h4>
+        <label class="text-xs mb-1 block" style="color:var(--txt2)">ข้อความต้อนรับ</label>
+        <input id="sv-welcome-msg" type="text" class="theme-inp w-full rounded-lg px-3 py-2 text-sm mb-3"/>
+        <button onclick="svSaveMsg()" class="px-4 py-2 rounded-lg text-sm font-semibold" style="background:#ca8a04;color:#fff">บันทึกข้อความ</button>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- Confirm Modal -->
-<div id="confirm-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-  <div class="bg-gray-900 border border-gray-700 rounded-3xl p-6 w-full max-w-sm slide-up text-center">
+<!-- ══ CONFIRM Modal ══════════════════════════════════════════ -->
+<div id="confirm-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background:rgba(0,0,0,.75);backdrop-filter:blur(6px)">
+  <div class="theme-card p-6 w-full max-w-sm slide-up text-center">
     <div class="text-5xl mb-4">✂️</div>
     <h3 class="text-xl font-bold mb-2">ยืนยันการตัดสต็อก</h3>
-    <p class="text-gray-400 text-sm mb-4">รายการที่เลือกจะถูกหักออกจากสต็อกทันที</p>
-    <div id="confirm-list" class="bg-gray-800 rounded-xl p-3 text-sm text-left mb-5 max-h-48 overflow-y-auto"></div>
+    <p class="text-sm mb-4" style="color:var(--txt2)">รายการที่เลือกจะถูกหักออกจากสต็อกทันที</p>
+    <div id="confirm-list" class="rounded-xl p-3 text-sm text-left mb-5 max-h-48 overflow-y-auto" style="background:var(--bg2)"></div>
     <div class="flex gap-3">
-      <button onclick="closeConfirm()" class="flex-1 py-3 border border-gray-700 hover:border-gray-500 rounded-xl transition">ยกเลิก</button>
-      <button onclick="confirmCut()" class="flex-1 py-3 bg-blue-600 hover:bg-blue-500 rounded-xl font-bold transition">✅ ยืนยัน</button>
+      <button onclick="closeConfirm()" class="flex-1 py-3 rounded-xl border" style="border-color:var(--bdr);color:var(--txt)">ยกเลิก</button>
+      <button onclick="confirmCut()" class="flex-1 py-3 rounded-xl font-bold btn-acc">✅ ยืนยัน</button>
     </div>
   </div>
 </div>
 
-<!-- Toast -->
-<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 px-6 py-3 rounded-2xl font-semibold text-sm z-[100] opacity-0 text-white shadow-2xl transition-all duration-300 pointer-events-none"></div>
+<!-- ══ Theme Selector (all users) ═════════════════════════════ -->
+<div id="theme-panel" class="theme-panel">
+  <div class="flex justify-between items-center mb-3">
+    <p class="text-xs font-bold uppercase tracking-wider" style="color:var(--txt2)">🎨 เลือกธีม</p>
+    <button onclick="closeThemePanel()" class="text-xs" style="color:var(--txt2)">✕</button>
+  </div>
+  <!-- Basic themes -->
+  <p class="text-xs mb-2" style="color:var(--txt2)">ธีมพื้นฐาน</p>
+  <div class="theme-card-mini" id="th-dark" onclick="applyTheme('dark')">
+    <div class="theme-preview" style="background:linear-gradient(135deg,#0a1628,#0F4C81)"></div>
+    <div><div class="text-sm font-semibold">Dark Blue</div><div class="text-xs" style="color:var(--txt2)">Default</div></div>
+    <span class="ml-auto text-xs" style="color:var(--acc)" id="th-active-dark"></span>
+  </div>
+  <div class="theme-card-mini mt-1" id="th-light" onclick="applyTheme('light')">
+    <div class="theme-preview" style="background:linear-gradient(135deg,#e2e8f0,#f8fafc);border:1px solid #cbd5e1"></div>
+    <div><div class="text-sm font-semibold">Light</div><div class="text-xs" style="color:var(--txt2)">สว่าง</div></div>
+    <span class="ml-auto text-xs" style="color:var(--acc)" id="th-active-light"></span>
+  </div>
+  <div class="h-px my-3" style="background:var(--bdr)"></div>
+  <p class="text-xs mb-2" style="color:var(--txt2)">ธีม Custom</p>
+  <div id="user-theme-list"><p class="text-xs" style="color:var(--txt2)">ยังไม่มีธีม Custom</p></div>
+</div>
+
+<button class="theme-fab" onclick="toggleThemePanel()" title="เปลี่ยนธีม">🎨</button>
+
+<!-- ══ Toast ═════════════════════════════════════════════════ -->
+<div id="toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 px-6 py-3 rounded-2xl font-semibold text-sm z-[200] opacity-0 translate-y-4 text-white shadow-2xl"></div>
 
 <script>
-// ── Google Apps Script API (ใช้ google.script.run) ───────────
-// เมื่อ Host ผ่าน Apps Script ให้เรียกผ่าน google.script.run
-// เมื่อต้องการ test local ใช้ GAS_URL แทน
+var GAS_URL = "https://script.google.com/macros/s/AKfycbwnawNLvdITPABG2rj7yfh9f-I5vxhEcSLP9yxxmUkCFffuzk8BrnJkka5GjjLX_RU0/exec";
 
-var GAS_URL = "https://script.google.com/macros/s/AKfycbxItEnbLSlcvYcSFbqff2MTBzy7j1-fxoC9g9dW2vnekxZxHmGYxvFpwxUIerYWX6wL/exec"; // ← ใส่ URL Apps Script
+// ══════════════════════════════════════════════════════════════
+// THEME ENGINE
+// ══════════════════════════════════════════════════════════════
+var BUILT_IN = {
+  dark: {
+    name:"Dark Blue", builtin:true,
+    acc:"#3b82f6",acc2:"#2563eb",txt:"#f9fafb",txt2:"#9ca3af",
+    bg0:"#030712",bg1:"#111827",bg2:"#1f2937",bg3:"#374151",
+    g1:"#0a1628",g2:"#0F4C81",g3:"#1a3a6b",bgImg:"",overlay:55
+  },
+  light: {
+    name:"Light", builtin:true,
+    acc:"#2563eb",acc2:"#1d4ed8",txt:"#0f172a",txt2:"#475569",
+    bg0:"#f8fafc",bg1:"#f1f5f9",bg2:"#e2e8f0",bg3:"#cbd5e1",
+    g1:"#1e3a5f",g2:"#1e40af",g3:"#1d4ed8",bgImg:"",overlay:30
+  }
+};
 
+function getCustomThemes() {
+  try { return JSON.parse(localStorage.getItem('nf3-custom-themes') || '{}'); } catch(e){ return {}; }
+}
+function saveCustomThemes(obj) {
+  localStorage.setItem('nf3-custom-themes', JSON.stringify(obj));
+}
+function getAllThemes() {
+  return Object.assign({}, BUILT_IN, getCustomThemes());
+}
+
+function applyTheme(key) {
+  var themes = getAllThemes();
+  var t = themes[key];
+  if (!t) return;
+  var r = document.documentElement.style;
+  r.setProperty('--acc',  t.acc);
+  r.setProperty('--acc2', t.acc2);
+  r.setProperty('--txt',  t.txt);
+  r.setProperty('--txt2', t.txt2);
+  r.setProperty('--bg0',  t.bg0);
+  r.setProperty('--bg1',  t.bg1);
+  r.setProperty('--bg2',  t.bg2);
+  r.setProperty('--bg3',  t.bg3);
+  r.setProperty('--bdr',  t.bg3);
+  r.setProperty('--g1',   t.g1);
+  r.setProperty('--g2',   t.g2);
+  r.setProperty('--g3',   t.g3);
+  r.setProperty('--glow', hexToRgba(t.acc, 0.35));
+  r.setProperty('--card-bg', hexToRgba(t.bg1, 0.85));
+  r.setProperty('--inp-bg',  hexToRgba(t.bg2, 0.9));
+  if (t.bgImg) {
+    r.setProperty('--bg-img', 'url("'+t.bgImg+'")');
+    r.setProperty('--bg-overlay', 'rgba(0,0,0,'+(t.overlay/100)+')');
+  } else {
+    r.setProperty('--bg-img', 'none');
+    r.setProperty('--bg-overlay', 'transparent');
+  }
+  localStorage.setItem('nf3-active-theme', key);
+  renderThemeSelector();
+}
+
+function hexToRgba(hex, a) {
+  var r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+  return 'rgba('+r+','+g+','+b+','+a+')';
+}
+
+// ── Theme Selector (user-facing) ───────────────────────────
+function toggleThemePanel() {
+  var p = document.getElementById('theme-panel');
+  p.classList.toggle('open');
+}
+function closeThemePanel() { document.getElementById('theme-panel').classList.remove('open'); }
+
+function renderThemeSelector() {
+  var active = localStorage.getItem('nf3-active-theme') || 'dark';
+  var customs = getCustomThemes();
+  // Update built-in active marks
+  document.getElementById('th-active-dark').textContent  = active==='dark' ?'✓':'';
+  document.getElementById('th-active-light').textContent = active==='light'?'✓':'';
+  // Render custom themes
+  var ul = document.getElementById('user-theme-list');
+  ul.innerHTML = '';
+  var keys = Object.keys(customs);
+  if (!keys.length) { ul.innerHTML='<p class="text-xs" style="color:var(--txt2)">ยังไม่มีธีม Custom</p>'; return; }
+  keys.forEach(function(k){
+    var t = customs[k];
+    var div = document.createElement('div');
+    div.className = 'theme-card-mini mt-1' + (active===k?' active':'');
+    div.onclick = function(){ applyTheme(k); closeThemePanel(); };
+    div.innerHTML = '<div class="theme-preview" style="background:linear-gradient(135deg,'+t.g1+','+t.g2+','+t.g3+')' + (t.bgImg?';background-image:url('+t.bgImg+')':'') + ';background-size:cover"></div>' +
+      '<div><div class="text-sm font-semibold">'+t.name+'</div></div>' +
+      '<span class="ml-auto text-xs" style="color:var(--acc)">'+(active===k?'✓':'')+'</span>';
+    ul.appendChild(div);
+  });
+}
+
+// ── Theme Builder (Supervisor) ─────────────────────────────
+function livePreview() {
+  var acc  = document.getElementById('tb-acc').value;
+  var acc2 = document.getElementById('tb-acc2').value;
+  var txt  = document.getElementById('tb-txt').value;
+  var txt2 = document.getElementById('tb-txt2').value;
+  var bg0  = document.getElementById('tb-bg0').value;
+  var bg1  = document.getElementById('tb-bg1').value;
+  var bg2  = document.getElementById('tb-bg2').value;
+  var bg3  = document.getElementById('tb-bg3').value;
+  var g1   = document.getElementById('tb-g1').value;
+  var g2   = document.getElementById('tb-g2').value;
+  var g3   = document.getElementById('tb-g3').value;
+  var ov   = document.getElementById('tb-overlay').value;
+  document.getElementById('overlay-val').textContent = ov+'%';
+
+  // Update preview bar
+  var pb = document.getElementById('preview-bar');
+  if (pb) pb.style.background = bg3;
+  var pa = document.getElementById('prev-acc');
+  if (pa) pa.style.background = acc;
+  var pt = document.getElementById('prev-txt');
+  if (pt) { pt.style.color = txt; pt.textContent = document.getElementById('tb-name').value || 'NF3. Spare Part'; }
+  var pt2 = document.getElementById('prev-txt2');
+  if (pt2) pt2.style.color = txt2;
+  var pg = document.getElementById('prev-grad');
+  if (pg) pg.style.background = 'linear-gradient(135deg,'+g1+','+g2+','+g3+')';
+}
+
+function setPresetImg(url) {
+  document.getElementById('tb-bg-img').value = url;
+  livePreview();
+}
+
+function saveBuilderTheme() {
+  var name = document.getElementById('tb-name').value.trim();
+  if (!name) { showToast('กรอกชื่อธีมก่อนครับ','warn'); return; }
+  var key = 'custom_' + name.replace(/\s+/g,'_') + '_' + Date.now();
+  var theme = {
+    name: name,
+    acc:  document.getElementById('tb-acc').value,
+    acc2: document.getElementById('tb-acc2').value,
+    txt:  document.getElementById('tb-txt').value,
+    txt2: document.getElementById('tb-txt2').value,
+    bg0:  document.getElementById('tb-bg0').value,
+    bg1:  document.getElementById('tb-bg1').value,
+    bg2:  document.getElementById('tb-bg2').value,
+    bg3:  document.getElementById('tb-bg3').value,
+    g1:   document.getElementById('tb-g1').value,
+    g2:   document.getElementById('tb-g2').value,
+    g3:   document.getElementById('tb-g3').value,
+    bgImg:   document.getElementById('tb-bg-img').value.trim(),
+    overlay: parseInt(document.getElementById('tb-overlay').value) || 55
+  };
+  var customs = getCustomThemes();
+  customs[key] = theme;
+  saveCustomThemes(customs);
+  renderCustomThemesList();
+  renderThemeSelector();
+  applyTheme(key);
+  showToast('✅ บันทึกธีม "'+name+'" สำเร็จ','ok');
+  document.getElementById('tb-name').value = '';
+}
+
+function renderCustomThemesList() {
+  var customs = getCustomThemes();
+  var list = document.getElementById('custom-themes-list');
+  var none = document.getElementById('no-custom-themes');
+  list.innerHTML = '';
+  var keys = Object.keys(customs);
+  if (!keys.length) { none.style.display='block'; return; }
+  none.style.display='none';
+  keys.forEach(function(k){
+    var t = customs[k];
+    var card = document.createElement('div');
+    card.className = 'rounded-xl p-3 flex items-center gap-3';
+    card.style.background = 'var(--bg3)';
+    card.innerHTML =
+      '<div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,'+t.g1+','+t.g2+','+t.g3+');background-image:'+( t.bgImg?'url('+t.bgImg+')':'none')+';background-size:cover;flex-shrink:0"></div>'+
+      '<div class="flex-1 min-w-0"><div class="text-sm font-semibold truncate">'+t.name+'</div></div>'+
+      '<div class="flex gap-1">'+
+        '<button onclick="editTheme(\''+k+'\')" class="text-xs px-2 py-1 rounded" style="background:var(--bg2);color:var(--acc)">✏️</button>'+
+        '<button onclick="deleteTheme(\''+k+'\')" class="text-xs px-2 py-1 rounded" style="background:var(--bg2);color:#f87171">🗑</button>'+
+      '</div>';
+    list.appendChild(card);
+  });
+}
+
+function editTheme(k) {
+  var customs = getCustomThemes();
+  var t = customs[k];
+  if (!t) return;
+  svTab('theme');
+  document.getElementById('tb-name').value   = t.name;
+  document.getElementById('tb-acc').value    = t.acc;
+  document.getElementById('tb-acc2').value   = t.acc2;
+  document.getElementById('tb-txt').value    = t.txt;
+  document.getElementById('tb-txt2').value   = t.txt2;
+  document.getElementById('tb-bg0').value    = t.bg0;
+  document.getElementById('tb-bg1').value    = t.bg1;
+  document.getElementById('tb-bg2').value    = t.bg2;
+  document.getElementById('tb-bg3').value    = t.bg3;
+  document.getElementById('tb-g1').value     = t.g1;
+  document.getElementById('tb-g2').value     = t.g2;
+  document.getElementById('tb-g3').value     = t.g3;
+  document.getElementById('tb-bg-img').value = t.bgImg || '';
+  document.getElementById('tb-overlay').value= t.overlay || 55;
+  delete customs[k];
+  saveCustomThemes(customs);
+  livePreview();
+}
+
+function deleteTheme(k) {
+  if (!confirm('ต้องการลบธีมนี้?')) return;
+  var customs = getCustomThemes();
+  delete customs[k];
+  saveCustomThemes(customs);
+  var active = localStorage.getItem('nf3-active-theme');
+  if (active === k) applyTheme('dark');
+  renderCustomThemesList();
+  renderThemeSelector();
+  showToast('🗑 ลบธีมแล้ว','ok');
+}
+
+// ══════════════════════════════════════════════════════════════
+// API
+// ══════════════════════════════════════════════════════════════
 function callServer(action, params, callback) {
-  if (!GAS_URL) { callback({error:'ไม่พบ GAS_URL'}); return; }
+  if (!GAS_URL || GAS_URL === 'https://script.google.com/macros/s/AKfycbwnawNLvdITPABG2rj7yfh9f-I5vxhEcSLP9yxxmUkCFffuzk8BrnJkka5GjjLX_RU0/exec') {
+    callback({error:'กรุณาใส่ GAS_URL ในไฟล์'}); return;
+  }
   params = params || {};
-
-  // GET actions — ใช้ URL params (ไม่มี preflight = ไม่มี CORS issue)
   var getActions = ['getStock','getConfig','ping'];
   if (getActions.indexOf(action) !== -1) {
-    var p = Object.assign({action: action}, params);
+    var p = Object.assign({action:action}, params);
     var qs = Object.keys(p).map(function(k){ return encodeURIComponent(k)+'='+encodeURIComponent(p[k]); }).join('&');
+    var cb = 'cb_'+action+'_'+Date.now();
     var script = document.createElement('script');
-    var cb = 'cb_' + action + '_' + Date.now();
-    window[cb] = function(data) { delete window[cb]; document.head.removeChild(script); callback(data); };
+    window[cb] = function(data){ delete window[cb]; try{document.head.removeChild(script);}catch(e){} callback(data); };
     script.onerror = function(){ delete window[cb]; try{document.head.removeChild(script);}catch(e){} callback({error:'Network error'}); };
-    script.src = GAS_URL + '?' + qs + '&callback=' + cb;
+    script.src = GAS_URL+'?'+qs+'&callback='+cb;
     document.head.appendChild(script);
-    return;
+  } else {
+    fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(Object.assign({action:action},params)) })
+      .then(function(r){ return r.text(); })
+      .then(function(txt){ try{callback(JSON.parse(txt));}catch(e){callback({error:'Parse: '+txt.slice(0,80)});} })
+      .catch(function(e){ callback({error:e.message}); });
   }
-
-  // POST actions — ใช้ fetch + text/plain (หลีกเลี่ยง CORS preflight)
-  var payload = JSON.stringify(Object.assign({action: action}, params));
-  fetch(GAS_URL, {
-    method: 'POST',
-    headers: {'Content-Type': 'text/plain'},
-    body: payload
-  })
-  .then(function(r){
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    return r.text();
-  })
-  .then(function(txt){
-    try { callback(JSON.parse(txt)); }
-    catch(e) { callback({error: 'Parse error: ' + txt.slice(0,100)}); }
-  })
-  .catch(function(e){ callback({error: e.message}); });
 }
 
-var currentCat   = 'Sachet';
-var stockData    = [];
-var isSupervisor = false;
-var svPIN        = '';
-var pinMode      = 'supervisor';
-var pendingCuts  = [];
+// ══════════════════════════════════════════════════════════════
+// APP STATE & NAVIGATION
+// ══════════════════════════════════════════════════════════════
+var currentCat='Sachet', stockData=[], isSv=false, svPIN='', pinMode='sv', pendingCuts=[];
 
-// ── Navigation ──────────────────────────────────────────────
-function goTo(name) {
-  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
-  var el = document.getElementById('scr-' + name);
-  if (el) el.classList.add('active');
+function goTo(name){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  var el=document.getElementById('scr-'+name); if(el)el.classList.add('active');
 }
-function goToSelect() {
-  goTo('select');
-  loadAllSummary();
-}
-function goToStock(cat) {
-  currentCat = cat;
-  goTo('stock');
-  loadStock(cat);
-}
+function goToSelect(){ goTo('select'); loadAllSummary(); }
+function goToStock(cat){ currentCat=cat; goTo('stock'); loadStock(cat); }
 
-// ── Config ──────────────────────────────────────────────────
-function loadConfig() {
-  callServer('getConfig', {}, function(r) {
-    if (r && r.ok && r.config) {
-      var msg = r.config.WelcomeMsg || 'วันนี้คุณมีวันที่ดีแล้วหรือยัง?';
-      var name = r.config.AppName || 'NF3.';
-      document.getElementById('welcome-msg').textContent = msg;
-      document.getElementById('app-name').textContent = name;
-    } else {
-      document.getElementById('welcome-msg').textContent = 'วันนี้คุณมีวันที่ดีแล้วหรือยัง?';
-    }
+function loadConfig(){
+  callServer('getConfig',{},function(r){
+    var msg='วันนี้คุณมีวันที่ดีแล้วหรือยัง?';
+    if(r&&r.ok&&r.config){ msg=r.config.WelcomeMsg||msg; }
+    document.getElementById('welcome-msg').textContent=msg;
   });
 }
 
-// ── Summary ──────────────────────────────────────────────────
-function loadAllSummary() {
-  callServer('getStock', {category: ''}, function(r) {
-    if (!r || !r.ok) return;
-    var items = r.items || [];
-    var low = 0, crit = 0;
-    items.forEach(function(i) {
-      if (Number(i.stock) <= Number(i.minRed)) crit++;
-      else if (Number(i.stock) <= Number(i.minYellow)) low++;
-    });
-    document.getElementById('sum-total').textContent = items.length;
-    document.getElementById('sum-low').textContent = low;
-    document.getElementById('sum-crit').textContent = crit;
+function loadAllSummary(){
+  callServer('getStock',{category:''},function(r){
+    if(!r||!r.ok)return;
+    var items=r.items||[],low=0,crit=0;
+    items.forEach(function(i){ if(+i.stock<=+i.minRed)crit++; else if(+i.stock<=+i.minYellow)low++; });
+    document.getElementById('sum-total').textContent=items.length;
+    document.getElementById('sum-low').textContent=low;
+    document.getElementById('sum-crit').textContent=crit;
   });
 }
 
-// ── Load Stock ───────────────────────────────────────────────
-function loadStock(cat) {
-  currentCat = cat;
-  document.getElementById('stock-title').textContent = cat;
-  document.getElementById('stock-cat-badge').textContent = cat;
-
-  document.querySelectorAll('[id^="sb-"]').forEach(function(b) {
-    b.classList.remove('sb-active', 'font-semibold', 'text-blue-300');
-    b.classList.add('text-gray-400');
-  });
-  var sb = document.getElementById('sb-' + cat);
-  if (sb) { sb.classList.add('sb-active', 'font-semibold', 'text-blue-300'); sb.classList.remove('text-gray-400'); }
-
-  document.getElementById('tbl-loading').classList.remove('hidden');
-  document.getElementById('tbl-error').classList.add('hidden');
-  document.getElementById('tbl-wrap').classList.add('hidden');
-
-  callServer('getStock', {category: cat}, function(r) {
-    document.getElementById('tbl-loading').classList.add('hidden');
-    document.getElementById('last-update').textContent = 'อัปเดต: ' + new Date().toLocaleTimeString('th-TH');
+function loadStock(cat){
+  currentCat=cat;
+  document.getElementById('stock-title').textContent=cat;
+  document.getElementById('stock-badge').textContent=cat;
+  document.querySelectorAll('[id^="sb-"]').forEach(function(b){ b.classList.remove('sb-active'); });
+  var sb=document.getElementById('sb-'+cat); if(sb)sb.classList.add('sb-active');
+  show('tbl-loading'); hide('tbl-error'); hide('tbl-wrap');
+  callServer('getStock',{category:cat},function(r){
+    hide('tbl-loading');
+    document.getElementById('last-update').textContent='อัปเดต: '+new Date().toLocaleTimeString('th-TH');
     document.getElementById('last-update').classList.remove('hidden');
-
-    if (!r || !r.ok || r.error) {
-      document.getElementById('tbl-error').classList.remove('hidden');
-      return;
-    }
-    stockData = r.items || [];
-    renderTable();
-    document.getElementById('tbl-wrap').classList.remove('hidden');
+    if(!r||!r.ok||r.error){show('tbl-error');return;}
+    stockData=r.items||[]; renderTable(); show('tbl-wrap');
   });
 }
 
-// ── Render Table ─────────────────────────────────────────────
-function renderTable() {
-  var tbody = document.getElementById('stock-tbody');
-  tbody.innerHTML = '';
-  if (!stockData.length) {
-    tbody.innerHTML = '<tr><td colspan="7" class="text-center py-12 text-gray-500">ไม่มีรายการในหมวดนี้</td></tr>';
-    return;
-  }
-  stockData.forEach(function(item, i) {
-    var st = Number(item.stock);
-    var isRed    = st <= Number(item.minRed);
-    var isYellow = !isRed && st <= Number(item.minYellow);
-    var badgeCls = isRed ? 'badge-red' : isYellow ? 'badge-yellow' : 'badge-ok';
-    var tr = document.createElement('tr');
-    tr.className = 'tbl-row transition';
-    tr.innerHTML =
-      '<td class="px-3 py-3 text-center text-gray-500 text-xs">' + (i+1) + '</td>' +
-      '<td class="px-3 py-3 font-medium">' + item.name + '</td>' +
-      '<td class="px-3 py-3 text-center"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold mono ' + badgeCls + '">' + st + '</span></td>' +
-      '<td class="px-3 py-3 text-center text-gray-400 text-xs">' + item.unit + '</td>' +
-      '<td class="px-3 py-3 text-center"><input type="number" min="0" step="1" id="qty-' + item.id + '" placeholder="0" class="w-16 mono bg-gray-800 border border-gray-700 focus:border-blue-500 rounded-lg px-2 py-1.5 text-sm text-center focus:outline-none" onchange="updateSelected(\'' + item.id + '\')"/></td>' +
-      '<td class="px-3 py-3"><input type="text" id="reason-' + item.id + '" placeholder="สาเหตุการใช้..." class="w-full bg-gray-800 border border-gray-700 focus:border-blue-500 rounded-lg px-2 py-1.5 text-xs focus:outline-none"/></td>' +
-      '<td class="px-3 py-3 text-center"><input type="checkbox" id="chk-' + item.id + '" class="w-4 h-4 accent-blue-500 cursor-pointer" onchange="updateSelectedCount()"/></td>';
+function renderTable(){
+  var tbody=document.getElementById('stock-tbody'); tbody.innerHTML='';
+  if(!stockData.length){tbody.innerHTML='<tr><td colspan="7" class="text-center py-12" style="color:var(--txt2)">ไม่มีรายการ</td></tr>';return;}
+  stockData.forEach(function(item,i){
+    var st=+item.stock;
+    var isRed=st<=+item.minRed, isYw=!isRed&&st<=+item.minYellow;
+    var bc=isRed?'badge-rd':isYw?'badge-yw':'badge-ok';
+    var tr=document.createElement('tr'); tr.className='tbl-row';
+    tr.innerHTML=
+      '<td class="px-3 py-3 text-center text-xs" style="color:var(--txt2)">'+(i+1)+'</td>'+
+      '<td class="px-3 py-3 font-medium" style="color:var(--txt)">'+item.name+'</td>'+
+      '<td class="px-3 py-3 text-center"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold mono '+bc+'">'+st+'</span></td>'+
+      '<td class="px-3 py-3 text-center text-xs" style="color:var(--txt2)">'+item.unit+'</td>'+
+      '<td class="px-3 py-3 text-center"><input type="number" min="0" id="qty-'+item.id+'" placeholder="0" class="theme-inp w-16 rounded-lg px-2 py-1.5 text-sm text-center mono" onchange="updateSelected(\''+item.id+'\')"/></td>'+
+      '<td class="px-3 py-3"><input type="text" id="reason-'+item.id+'" placeholder="สาเหตุ..." class="theme-inp w-full rounded-lg px-2 py-1.5 text-xs"/></td>'+
+      '<td class="px-3 py-3 text-center"><input type="checkbox" id="chk-'+item.id+'" class="w-4 h-4 cursor-pointer" style="accent-color:var(--acc)" onchange="updateSelCount()"/></td>';
     tbody.appendChild(tr);
   });
-  updateSelectedCount();
+  updateSelCount();
 }
 
-function updateSelected(id) {
-  var qty = parseInt(document.getElementById('qty-' + id) && document.getElementById('qty-' + id).value) || 0;
-  var chk = document.getElementById('chk-' + id);
-  if (qty > 0 && chk) chk.checked = true;
-  updateSelectedCount();
+function updateSelected(id){
+  var q=document.getElementById('qty-'+id); if(!q)return;
+  if(+q.value>0){var c=document.getElementById('chk-'+id);if(c)c.checked=true;}
+  updateSelCount();
 }
-function updateSelectedCount() {
-  var checked = document.querySelectorAll('[id^="chk-"]:checked').length;
-  document.getElementById('selected-count').textContent = checked;
-}
-function selectAll() {
-  stockData.forEach(function(item) {
-    var chk = document.getElementById('chk-' + item.id);
-    if (chk) chk.checked = true;
-    var qty = document.getElementById('qty-' + item.id);
-    if (qty && !qty.value) qty.value = 1;
-  });
-  updateSelectedCount();
-}
-function clearAll() {
-  stockData.forEach(function(item) {
-    var c = document.getElementById('chk-' + item.id); if (c) c.checked = false;
-    var q = document.getElementById('qty-' + item.id); if (q) q.value = '';
-    var r = document.getElementById('reason-' + item.id); if (r) r.value = '';
-  });
-  updateSelectedCount();
-}
+function updateSelCount(){ document.getElementById('selected-count').textContent=document.querySelectorAll('[id^="chk-"]:checked').length; }
+function selectAll(){ stockData.forEach(function(i){ var c=document.getElementById('chk-'+i.id);if(c)c.checked=true; var q=document.getElementById('qty-'+i.id);if(q&&!q.value)q.value=1; }); updateSelCount(); }
+function clearAll(){ stockData.forEach(function(i){ var c=document.getElementById('chk-'+i.id);if(c)c.checked=false; var q=document.getElementById('qty-'+i.id);if(q)q.value=''; var r=document.getElementById('reason-'+i.id);if(r)r.value=''; }); updateSelCount(); }
 
-// ── Submit Cut ───────────────────────────────────────────────
-function submitCuts() {
-  var cuts = [];
-  stockData.forEach(function(item) {
-    var chk = document.getElementById('chk-' + item.id);
-    if (chk && chk.checked) {
-      var qty    = parseInt(document.getElementById('qty-' + item.id) && document.getElementById('qty-' + item.id).value) || 0;
-      var reason = document.getElementById('reason-' + item.id) && document.getElementById('reason-' + item.id).value || '';
-      if (qty > 0) cuts.push({id: item.id, name: item.name, qty: qty, reason: reason, current: Number(item.stock)});
+function submitCuts(){
+  var cuts=[];
+  stockData.forEach(function(item){
+    var chk=document.getElementById('chk-'+item.id);
+    if(chk&&chk.checked){
+      var qty=+(document.getElementById('qty-'+item.id)&&document.getElementById('qty-'+item.id).value)||0;
+      var rsn=(document.getElementById('reason-'+item.id)&&document.getElementById('reason-'+item.id).value)||'';
+      if(qty>0)cuts.push({id:item.id,name:item.name,qty:qty,reason:rsn,current:+item.stock});
     }
   });
-  if (!cuts.length) { showToast('เลือกรายการและกรอกจำนวนก่อนครับ', 'warn'); return; }
-  pendingCuts = cuts;
-  var list = document.getElementById('confirm-list');
-  list.innerHTML = cuts.map(function(c) {
-    return '<div class="flex justify-between items-center py-1 border-b border-gray-700/50 last:border-0">' +
-      '<span class="text-white">' + c.name + '</span>' +
-      '<span class="text-red-400 font-bold mono">-' + c.qty + ' ' + (c.reason ? '<span class="text-gray-400 text-xs">(' + c.reason + ')</span>' : '') + '</span></div>';
-  }).join('');
+  if(!cuts.length){showToast('เลือกรายการและกรอกจำนวนก่อนครับ','warn');return;}
+  pendingCuts=cuts;
+  var list=document.getElementById('confirm-list');
+  list.innerHTML=cuts.map(function(c){return'<div class="flex justify-between py-1 border-b" style="border-color:var(--bdr)"><span>'+c.name+'</span><span class="text-red-400 font-bold mono">-'+c.qty+(c.reason?' <span style="color:var(--txt2);font-size:11px">('+c.reason+')</span>':'')+'</span></div>';}).join('');
   document.getElementById('confirm-modal').classList.remove('hidden');
 }
-function confirmCut() {
-  closeConfirm();
-  showToast('กำลังบันทึก...', 'info');
-  callServer('cutStock', {cuts: pendingCuts, user: 'operator'}, function(r) {
-    if (r && r.ok) {
-      showToast('✅ ตัดสต็อกสำเร็จ ' + pendingCuts.length + ' รายการ', 'ok');
-      clearAll();
-      loadStock(currentCat);
-    } else {
-      showToast('❌ เกิดข้อผิดพลาด: ' + (r && r.error || ''), 'err');
-    }
+function confirmCut(){
+  closeConfirm(); showToast('กำลังบันทึก...','info');
+  callServer('cutStock',{cuts:pendingCuts,user:'operator'},function(r){
+    if(r&&r.ok){showToast('✅ ตัดสต็อกสำเร็จ '+pendingCuts.length+' รายการ','ok');clearAll();loadStock(currentCat);}
+    else showToast('❌ '+(r&&r.error||''),'err');
   });
 }
-function closeConfirm() { document.getElementById('confirm-modal').classList.add('hidden'); }
+function closeConfirm(){document.getElementById('confirm-modal').classList.add('hidden');}
 
-// ── PIN ──────────────────────────────────────────────────────
-var pinBuffer = '';
-function openPIN(mode) {
-  pinMode = mode; pinBuffer = '';
-  document.getElementById('pin-err').textContent = '';
-  document.getElementById('pin-title').textContent = mode === 'config' ? '⚙️ ตั้งค่าระบบ' : '🔐 Supervisor Login';
-  updatePinDots();
+// PIN
+var pinBuf='';
+function openPIN(mode){
+  pinMode=mode; pinBuf=''; updatePinDots();
+  document.getElementById('pin-err').textContent='';
+  document.getElementById('pin-title').textContent='🔐 Supervisor Login';
   document.getElementById('pin-modal').classList.remove('hidden');
 }
-function pinClose() { document.getElementById('pin-modal').classList.add('hidden'); pinBuffer = ''; }
-function pinDel()   { if (pinBuffer.length) { pinBuffer = pinBuffer.slice(0, -1); updatePinDots(); } }
-function updatePinDots() { for (var i = 0; i < 4; i++) { var d = document.getElementById('pd' + i); if (d) d.classList.toggle('filled', i < pinBuffer.length); } }
-function pinKey(d) {
-  if (pinBuffer.length >= 4) return;
-  pinBuffer += d; updatePinDots();
-  if (pinBuffer.length === 4) setTimeout(submitPIN, 120);
-}
-function submitPIN() {
-  callServer('verifyPin', {pin: pinBuffer}, function(r) {
-    if (r && r.ok) {
-      isSupervisor = true; svPIN = pinBuffer;
-      pinClose();
-      openSvPanel();
-    } else {
-      document.getElementById('pin-err').textContent = '❌ PIN ไม่ถูกต้อง';
-      pinBuffer = ''; updatePinDots();
-    }
+function pinClose(){document.getElementById('pin-modal').classList.add('hidden');pinBuf='';}
+function pinDel(){if(pinBuf.length){pinBuf=pinBuf.slice(0,-1);updatePinDots();}}
+function updatePinDots(){for(var i=0;i<4;i++){var d=document.getElementById('pd'+i);if(d)d.classList.toggle('filled',i<pinBuf.length);}}
+function pinKey(d){if(pinBuf.length>=4)return;pinBuf+=d;updatePinDots();if(pinBuf.length===4)setTimeout(submitPIN,120);}
+function submitPIN(){
+  callServer('verifyPin',{pin:pinBuf},function(r){
+    if(r&&r.ok){isSv=true;svPIN=pinBuf;pinClose();openSvPanel();}
+    else{document.getElementById('pin-err').textContent='❌ PIN ไม่ถูกต้อง';pinBuf='';updatePinDots();}
   });
 }
 
-// ── Supervisor Panel ─────────────────────────────────────────
-function openSvPanel() {
+// Supervisor panel
+function openSvPanel(){
   document.getElementById('sv-panel').classList.remove('hidden');
-  document.getElementById('sv-cat-label').textContent = currentCat;
-  var msgEl = document.getElementById('welcome-msg');
-  document.getElementById('sv-welcome-msg').value = msgEl ? msgEl.textContent : '';
-  renderSvTable();
+  document.getElementById('sv-cat-label').textContent=currentCat;
+  var m=document.getElementById('welcome-msg');
+  document.getElementById('sv-welcome-msg').value=m?m.textContent:'';
+  svTab('stock'); renderSvTable(); renderCustomThemesList();
 }
-function closeSvPanel() { document.getElementById('sv-panel').classList.add('hidden'); }
-function renderSvTable() {
-  var tbody = document.getElementById('sv-tbody');
-  tbody.innerHTML = '';
-  (stockData || []).forEach(function(item) {
-    var tr = document.createElement('tr');
-    tr.innerHTML =
-      '<td class="py-2 pr-2 text-sm">' + item.name + '</td>' +
-      '<td class="py-2 px-1"><input type="number" value="' + item.stock + '" id="sv-s-' + item.id + '" class="w-20 mono bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm text-center focus:border-green-500 focus:outline-none"/></td>' +
-      '<td class="py-2 px-1"><input type="number" value="' + item.minYellow + '" id="sv-y-' + item.id + '" class="w-14 mono bg-gray-700 border border-yellow-700/50 rounded px-2 py-1 text-sm text-center focus:outline-none"/></td>' +
-      '<td class="py-2 px-1"><input type="number" value="' + item.minRed + '" id="sv-r-' + item.id + '" class="w-14 mono bg-gray-700 border border-red-700/50 rounded px-2 py-1 text-sm text-center focus:outline-none"/></td>' +
-      '<td class="py-2 px-1 text-center"><button onclick="svSave(\'' + item.id + '\')" class="px-3 py-1 bg-green-700 hover:bg-green-600 rounded text-xs font-semibold transition">บันทึก</button></td>' +
-      '<td class="py-2 px-1 text-center"><button onclick="svDelete(\'' + item.id + '\',\'' + item.name.replace(/'/g,"\\'")+  '\')" class="px-2 py-1 bg-red-900/60 hover:bg-red-800 rounded text-xs text-red-400 transition">🗑</button></td>';
+function closeSvPanel(){document.getElementById('sv-panel').classList.add('hidden');}
+
+function svTab(name){
+  ['stock','theme','msg'].forEach(function(t){
+    var tab=document.getElementById('sv-tab-'+t); if(tab)tab.classList.toggle('hidden',t!==name);
+    var btn=document.getElementById('tab-'+t);
+    if(btn){btn.style.borderColor=t===name?'var(--acc)':'transparent';btn.style.color=t===name?'var(--acc)':'var(--txt2)';}
+  });
+  if(name==='theme'){livePreview();}
+}
+
+function renderSvTable(){
+  var tbody=document.getElementById('sv-tbody');tbody.innerHTML='';
+  (stockData||[]).forEach(function(item){
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td class="py-2 pr-2 text-sm" style="color:var(--txt)">'+item.name+'</td>'+
+      '<td class="py-2 px-1"><input type="number" value="'+item.stock+'" id="sv-s-'+item.id+'" class="theme-inp w-20 rounded px-2 py-1 text-sm text-center mono"/></td>'+
+      '<td class="py-2 px-1"><input type="number" value="'+item.minYellow+'" id="sv-y-'+item.id+'" class="theme-inp w-14 rounded px-2 py-1 text-sm text-center mono"/></td>'+
+      '<td class="py-2 px-1"><input type="number" value="'+item.minRed+'" id="sv-r-'+item.id+'" class="theme-inp w-14 rounded px-2 py-1 text-sm text-center mono"/></td>'+
+      '<td class="py-2 px-1 text-center"><button onclick="svSave(\''+item.id+'\')" class="px-3 py-1 rounded text-xs font-semibold" style="background:#166534;color:#bbf7d0">บันทึก</button></td>'+
+      '<td class="py-2 px-1 text-center"><button onclick="svDelete(\''+item.id+'\',\''+item.name.replace(/'/g,"\\'")+'\' )" class="px-2 py-1 rounded text-xs text-red-400" style="background:var(--bg3)">🗑</button></td>';
     tbody.appendChild(tr);
   });
 }
-function svSave(id) {
-  var stock = parseInt(document.getElementById('sv-s-' + id) && document.getElementById('sv-s-' + id).value) || 0;
-  var minY  = parseInt(document.getElementById('sv-y-' + id) && document.getElementById('sv-y-' + id).value) || 5;
-  var minR  = parseInt(document.getElementById('sv-r-' + id) && document.getElementById('sv-r-' + id).value) || 2;
-  callServer('updateStock', {pin: svPIN, id: id, stock: stock, minYellow: minY, minRed: minR}, function(r) {
-    if (r && r.ok) { showToast('✅ บันทึกสำเร็จ', 'ok'); loadStock(currentCat); }
-    else showToast('❌ ' + (r && r.error || ''), 'err');
+
+function svSave(id){
+  var s=+(document.getElementById('sv-s-'+id)&&document.getElementById('sv-s-'+id).value)||0;
+  var y=+(document.getElementById('sv-y-'+id)&&document.getElementById('sv-y-'+id).value)||5;
+  var r=+(document.getElementById('sv-r-'+id)&&document.getElementById('sv-r-'+id).value)||2;
+  callServer('updateStock',{pin:svPIN,id:id,stock:s,minYellow:y,minRed:r},function(r){
+    if(r&&r.ok){showToast('✅ บันทึกสำเร็จ','ok');loadStock(currentCat);}else showToast('❌ '+(r&&r.error||''),'err');
   });
 }
-function svDelete(id, name) {
-  if (!confirm('ต้องการลบ "' + name + '" หรือไม่?')) return;
-  callServer('deleteItem', {pin: svPIN, id: id}, function(r) {
-    if (r && r.ok) { showToast('🗑 ลบรายการสำเร็จ', 'ok'); closeSvPanel(); loadStock(currentCat); }
-    else showToast('❌ ' + (r && r.error || ''), 'err');
+function svDelete(id,name){
+  if(!confirm('ต้องการลบ "'+name+'"?'))return;
+  callServer('deleteItem',{pin:svPIN,id:id},function(r){
+    if(r&&r.ok){showToast('🗑 ลบแล้ว','ok');closeSvPanel();loadStock(currentCat);}else showToast('❌ '+(r&&r.error||''),'err');
   });
 }
-function svAddItem() {
-  var name  = document.getElementById('sv-new-name').value.trim();
-  var cat   = document.getElementById('sv-new-cat').value;
-  var stock = parseInt(document.getElementById('sv-new-stock').value) || 0;
-  var unit  = document.getElementById('sv-new-unit').value || 'ชิ้น';
-  var minY  = parseInt(document.getElementById('sv-new-yellow').value) || 5;
-  var minR  = parseInt(document.getElementById('sv-new-red').value) || 2;
-  if (!name) { showToast('กรอกชื่อรายการด้วยครับ', 'warn'); return; }
-  callServer('addItem', {pin: svPIN, category: cat, name: name, stock: stock, unit: unit, minYellow: minY, minRed: minR}, function(r) {
-    if (r && r.ok) {
-      showToast('✅ เพิ่มรายการสำเร็จ', 'ok');
-      document.getElementById('sv-new-name').value = '';
-      document.getElementById('sv-new-stock').value = '';
-      currentCat = cat;
-      loadStock(cat);
-      document.getElementById('sv-cat-label').textContent = cat;
-    } else showToast('❌ ' + (r && r.error || ''), 'err');
+function svAddItem(){
+  var name=document.getElementById('sv-new-name').value.trim();
+  var cat=document.getElementById('sv-new-cat').value;
+  if(!name){showToast('กรอกชื่อรายการด้วยครับ','warn');return;}
+  callServer('addItem',{pin:svPIN,category:cat,name:name,
+    stock:+(document.getElementById('sv-new-stock').value)||0,
+    unit:document.getElementById('sv-new-unit').value||'ชิ้น',
+    minYellow:+(document.getElementById('sv-new-yellow').value)||5,
+    minRed:+(document.getElementById('sv-new-red').value)||2},
+  function(r){
+    if(r&&r.ok){showToast('✅ เพิ่มรายการสำเร็จ','ok');document.getElementById('sv-new-name').value='';loadStock(cat);}
+    else showToast('❌ '+(r&&r.error||''),'err');
   });
 }
-function svSaveMsg() {
-  var msg = document.getElementById('sv-welcome-msg').value.trim();
-  if (!msg) return;
-  callServer('saveConfig', {pin: svPIN, key: 'WelcomeMsg', value: msg}, function(r) {
-    if (r && r.ok) { document.getElementById('welcome-msg').textContent = msg; showToast('✅ บันทึกข้อความสำเร็จ', 'ok'); }
-    else showToast('❌ ' + (r && r.error || ''), 'err');
+function svSaveMsg(){
+  var msg=document.getElementById('sv-welcome-msg').value.trim();if(!msg)return;
+  callServer('saveConfig',{pin:svPIN,key:'WelcomeMsg',value:msg},function(r){
+    if(r&&r.ok){document.getElementById('welcome-msg').textContent=msg;showToast('✅ บันทึกข้อความสำเร็จ','ok');}
+    else showToast('❌ '+(r&&r.error||''),'err');
   });
 }
 
-// ── Toast ────────────────────────────────────────────────────
-function showToast(msg, type) {
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.background = type==='ok'?'#166534':type==='err'?'#7f1d1d':type==='warn'?'#854d0e':'#1e40af';
-  t.style.opacity = '1'; t.style.transform = 'translateX(-50%) translateY(0)'; t.style.pointerEvents = 'none';
-  setTimeout(function(){ t.style.opacity = '0'; t.style.transform = 'translateX(-50%) translateY(16px)'; }, 2800);
+// Helpers
+function show(id){var e=document.getElementById(id);if(e)e.classList.remove('hidden');}
+function hide(id){var e=document.getElementById(id);if(e)e.classList.add('hidden');}
+
+function showToast(msg,type){
+  var t=document.getElementById('toast');
+  t.textContent=msg;
+  t.style.background=type==='ok'?'#166534':type==='err'?'#7f1d1d':type==='warn'?'#854d0e':'#1e40af';
+  t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';t.style.pointerEvents='none';
+  setTimeout(function(){t.style.opacity='0';t.style.transform='translateX(-50%) translateY(16px)';},2800);
 }
 
-// ── Clock ────────────────────────────────────────────────────
-function startClock() {
-  var clk = document.getElementById('welcome-clock');
-  if (!clk) return;
-  var tick = function(){ clk.textContent = new Date().toLocaleString('th-TH', {hour12:false,year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'}); };
-  tick(); setInterval(tick, 1000);
+function startClock(){
+  var c=document.getElementById('welcome-clock');if(!c)return;
+  var tick=function(){c.textContent=new Date().toLocaleString('th-TH',{hour12:false,year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});};
+  tick();setInterval(tick,1000);
 }
 
-// ── Init ─────────────────────────────────────────────────────
-window.onload = function() {
+document.addEventListener('click',function(e){
+  var p=document.getElementById('theme-panel');
+  var fab=document.querySelector('.theme-fab');
+  if(p&&p.classList.contains('open')&&!p.contains(e.target)&&fab&&!fab.contains(e.target))closeThemePanel();
+});
+
+// Init
+window.onload=function(){
   startClock();
+  var saved=localStorage.getItem('nf3-active-theme')||'dark';
+  applyTheme(saved);
+  renderThemeSelector();
   loadConfig();
 };
 </script>
-
-<!-- Theme Picker -->
-<div class="theme-picker">
-  <div id="theme-panel" class="theme-panel">
-    <h4>🎨 เลือกธีมสี</h4>
-    <div class="theme-grid">
-      <div class="theme-swatch active" data-theme="default" style="background:linear-gradient(135deg,#0F4C81,#3b82f6)" title="Blue (Default)" onclick="setTheme('default')">🔵</div>
-      <div class="theme-swatch" data-theme="ocean" style="background:linear-gradient(135deg,#0c4a6e,#06b6d4)" title="Ocean" onclick="setTheme('ocean')">🌊</div>
-      <div class="theme-swatch" data-theme="forest" style="background:linear-gradient(135deg,#14532d,#22c55e)" title="Forest" onclick="setTheme('forest')">🌿</div>
-      <div class="theme-swatch" data-theme="sunset" style="background:linear-gradient(135deg,#881337,#f43f5e)" title="Sunset" onclick="setTheme('sunset')">🌅</div>
-      <div class="theme-swatch" data-theme="purple" style="background:linear-gradient(135deg,#4a1d96,#a855f7)" title="Purple" onclick="setTheme('purple')">💜</div>
-      <div class="theme-swatch" data-theme="gold" style="background:linear-gradient(135deg,#713f12,#eab308)" title="Gold" onclick="setTheme('gold')">✨</div>
-      <div class="theme-swatch" data-theme="slate" style="background:linear-gradient(135deg,#1e1b4b,#818cf8)" title="Slate" onclick="setTheme('slate')">🔮</div>
-      <div class="theme-swatch light-swatch" data-theme="light" style="background:linear-gradient(135deg,#e2e8f0,#f1f5f9)" title="Light" onclick="setTheme('light')">☀️</div>
-    </div>
-    <div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--border)">
-      <p style="font-size:10px;color:var(--text-muted);text-align:center" id="theme-name-label">Blue (Default)</p>
-    </div>
-  </div>
-  <button class="theme-toggle-btn" onclick="toggleThemePanel()" title="เปลี่ยนธีม">🎨</button>
-</div>
-
-<script>
-// ── Theme System ──────────────────────────────────────────────
-var THEME_NAMES = {
-  'default':'Blue (Default)', 'ocean':'Ocean 🌊', 'forest':'Forest 🌿',
-  'sunset':'Sunset 🌅', 'purple':'Purple 💜', 'gold':'Gold ✨',
-  'slate':'Slate 🔮', 'light':'Light ☀️'
-};
-function setTheme(name) {
-  document.documentElement.setAttribute('data-theme', name === 'default' ? '' : name);
-  localStorage.setItem('nf3-theme', name);
-  document.querySelectorAll('.theme-swatch').forEach(function(s) {
-    s.classList.toggle('active', s.getAttribute('data-theme') === name);
-  });
-  var lbl = document.getElementById('theme-name-label');
-  if (lbl) lbl.textContent = THEME_NAMES[name] || name;
-  // Update tailwind dynamic classes that use bg-gray-*
-  updateDynamicColors(name);
-}
-function updateDynamicColors(theme) {
-  // Update inline bg-gray classes to use CSS vars
-  var style = document.getElementById('dynamic-theme-style');
-  if (!style) { style = document.createElement('style'); style.id = 'dynamic-theme-style'; document.head.appendChild(style); }
-  style.textContent = [
-    '.bg-gray-950 { background-color: var(--bg-950) !important; }',
-    '.bg-gray-900 { background-color: var(--bg-900) !important; }',
-    '.bg-gray-800 { background-color: var(--bg-800) !important; }',
-    '.bg-gray-700 { background-color: var(--bg-700) !important; }',
-    '.border-gray-800 { border-color: var(--border) !important; }',
-    '.border-gray-700 { border-color: var(--border) !important; }',
-    '.text-gray-400 { color: var(--text-muted) !important; }',
-    '.text-gray-500 { color: var(--text-muted) !important; }',
-    '.text-white { color: var(--text) !important; }',
-    'input[class*="bg-gray-800"], select[class*="bg-gray-700"] { background-color: var(--bg-800) !important; border-color: var(--border) !important; color: var(--text) !important; }',
-    '.divide-gray-800\/50 > * + * { border-color: var(--border) !important; }',
-    'table thead tr { background-color: var(--bg-900) !important; }',
-    '.tbl-row:hover td { background: rgba(var(--accent-glow), 0.08) !important; }',
-    '.sb-active { background: rgba(59,130,246,.15) !important; }',
-    'aside, .bg-gray-900.border-b { background-color: var(--bg-900) !important; border-color: var(--border) !important; }',
-    '#pin-modal .bg-gray-900, #sv-panel .bg-gray-900, #confirm-modal .bg-gray-900 { background-color: var(--bg-900) !important; border-color: var(--border) !important; }',
-    '#pin-modal .bg-gray-800, #sv-panel .bg-gray-800 { background-color: var(--bg-800) !important; }',
-    '.pin-key { background-color: var(--bg-800) !important; color: var(--text) !important; border: 1px solid var(--border) !important; }',
-    '.pin-key:hover { background-color: var(--accent) !important; }',
-    '.pin-dot { border-color: var(--border) !important; }',
-    '.pin-dot.filled { background: var(--accent) !important; border-color: var(--accent) !important; }',
-  ].join('\n');
-}
-function toggleThemePanel() {
-  var p = document.getElementById('theme-panel');
-  if (p) p.classList.toggle('open');
-}
-// Close panel on outside click
-document.addEventListener('click', function(e) {
-  var picker = document.querySelector('.theme-picker');
-  if (picker && !picker.contains(e.target)) {
-    var p = document.getElementById('theme-panel');
-    if (p) p.classList.remove('open');
-  }
-});
-// Load saved theme
-(function() {
-  var saved = localStorage.getItem('nf3-theme') || 'default';
-  setTheme(saved);
-})();
-</script>
-
 </body>
 </html>
